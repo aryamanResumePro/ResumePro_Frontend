@@ -8,9 +8,18 @@
 </head>
 <body class="bg-gray-50">
     <!-- Floating Navbar -->
-    <nav id="navbar" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-full px-6 py-3 flex justify-between items-center w-11/12 md:w-3/4 z-50 transition-all duration-300">
-        <div class="text-2xl font-bold text-blue-600">ResumePro</div>
-        <div class="hidden md:flex justify-center items-center space-x-6">
+    <nav id="navbar" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-full px-4 py-2 flex justify-between items-center w-11/12 md:w-3/4 z-50 transition-all duration-300">
+        <div class="text-xl md:text-2xl font-bold text-blue-600">ResumePro</div>
+        
+        <!-- Hamburger Menu for Mobile -->
+        <button id="mobileMenuButton" type="button" class="md:hidden p-2 focus:outline-none">
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </button>
+
+        <!-- Nav Links (Hidden on Mobile, Visible on Desktop) -->
+        <div id="navLinks" class="hidden md:flex justify-center items-center space-x-6">
             <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Home</a>
             <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
             <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
@@ -19,27 +28,38 @@
         </div>
     </nav>
 
+    <!-- Mobile Menu (Hidden by Default) -->
+    <div id="mobileMenu" class="md:hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-lg w-11/12 z-50 hidden">
+        <div class="flex flex-col space-y-4 p-6 text-center"> <!-- Centered text -->
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Home</a>
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">FAQs</a>
+            <a href="profile.html" class="nav-link bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">Get Started</a>
+        </div>
+    </div>
+
     <!-- Hero Section -->
-    <section class="hero legal-hero flex flex-col items-center justify-center text-center py-20 mt-16">
+    <section class="hero legal-hero flex flex-col items-center justify-center text-center py-12 md:py-20 mt-16">
         <div class="max-w-3xl w-full px-4 space-y-6">
-            <h1 class="text-5xl font-extrabold text-gray-800 leading-tight">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-gray-800 leading-tight">
                 Build Your Perfect <span class="text-blue-600 inline">Resume</span>
             </h1>
-            <p class="text-lg text-gray-600">
+            <p class="text-base md:text-lg text-gray-600">
                 Create a professional, ATS-friendly, and impactful resume in minutes with our easy-to-use resume generator.
             </p>
         </div>
     </section>
-    
-    <main class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-12">Create Your Resume</h1>
 
-        <form id="resumeForm" class="bg-white p-8 shadow-lg rounded-xl max-w-4xl mx-auto space-y-12">
-            
+    <!-- Main Form Section -->
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">Create Your Resume</h1>
+
+        <form id="resumeForm" class="bg-white p-6 md:p-8 shadow-lg rounded-xl max-w-4xl mx-auto space-y-8">
             <!-- Basic Information -->
-            <div class="space-y-8">
-                <h2 class="text-2xl font-semibold text-gray-800 border-b pb-4">Basic Information</h2>
-                <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-6">
+                <h2 class="text-xl md:text-2xl font-semibold text-gray-800 border-b pb-4">Basic Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="block font-medium text-gray-700">Full Name</label>
                         <input type="text" name="name" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter your name" required>
@@ -50,35 +70,113 @@
                     </div>
                     <div class="space-y-2">
                         <label class="block font-medium text-gray-700">Phone</label>
-                        <input type="tel" name="phone" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Phone" pattern="[0-9]{10}" required>
-                        <small class="text-gray-500 text-sm">Format: 10-digit number (e.g., 9876543210)</small>
+                        <div class="relative">
+                            <input
+                                type="tel"
+                                name="phone"
+                                class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500"
+                                placeholder="+1-1234567890"
+                                pattern="\+\d{1,4}-\d{7,14}"
+                                title="Please enter a valid phone number in the format +1-1234567890."
+                                required
+                            >
+                            <!-- Info icon with tooltip -->
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <div class="group relative">
+                                    <!-- Info icon -->
+                                    <svg class="w-5 h-5 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <!-- Tooltip text -->
+                                    <div class="hidden group-hover:block absolute right-0 -top-2 transform -translate-y-full w-80 p-3 bg-gray-700 text-white text-sm rounded-lg shadow-lg z-50">
+                                        Format: Include country code (e.g., +1-1234567890).
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Link to search for country codes -->
+                        <a href="https://countrycode.org/" target="_blank" class="text-sm text-blue-500 hover:text-blue-700">
+                            Not sure about your country code? Search here.
+                        </a>
                     </div>
-                    <!-- LinkedIn Profile Field -->
                     <div class="space-y-2">
                         <label class="block font-medium text-gray-700">LinkedIn Profile</label>
-                        <input type="url" name="linkedin" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="https://linkedin.com/in/your-profile">
-                        <small class="text-gray-500 text-sm">Optional, but preferred to help recruiters connect with you.</small>
+                        <div class="relative">
+                            <input type="url" name="linkedin" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="https://linkedin.com/in/your-profile">
+                            <!-- Info icon with tooltip -->
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <div class="group relative">
+                                    <!-- Info icon -->
+                                    <svg class="w-5 h-5 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <!-- Tooltip text -->
+                                    <div class="hidden group-hover:block absolute right-0 -top-2 transform -translate-y-full w-80 p-3 bg-gray-700 text-white text-sm rounded-lg shadow-lg z-50">
+                                        Required to showcase your professional background, network, and credibility, making it easier for recruiters to assess your profile.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- GitHub Profile Field -->
                     <div class="space-y-2">
                         <label class="block font-medium text-gray-700">GitHub Profile</label>
-                        <input type="url" name="github" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="https://github.com/your-profile">
-                        <small class="text-gray-500 text-sm">Optional, but preferred to showcase your coding projects and contributions.</small>
+                        <div class="relative">
+                            <input type="url" name="github" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="https://github.com/your-profile">
+                            <!-- Info icon with tooltip -->
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <div class="group relative">
+                                    <!-- Info icon -->
+                                    <svg class="w-5 h-5 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <!-- Tooltip text -->
+                                    <div class="hidden group-hover:block absolute right-0 -top-2 transform -translate-y-full w-80 p-3 bg-gray-700 text-white text-sm rounded-lg shadow-lg z-50">
+                                        A must for tech jobs to showcase coding projects and contributions, but not required for non-tech domains.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- Personal Website Field -->
                     <div class="space-y-2">
                         <label class="block font-medium text-gray-700">Personal Website</label>
-                        <input type="url" name="website" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="https://yourwebsite.com">
-                        <small class="text-gray-500 text-sm">Optional, but preferred to share your portfolio or personal brand.</small>
+                        <div class="relative">
+                            <input type="url" name="website" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="https://yourwebsite.com">
+                            <!-- Info icon with tooltip -->
+                            <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <div class="group relative">
+                                    <!-- Info icon -->
+                                    <svg class="w-5 h-5 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <!-- Tooltip text -->
+                                    <div class="hidden group-hover:block absolute right-0 -top-2 transform -translate-y-full w-80 p-3 bg-gray-700 text-white text-sm rounded-lg shadow-lg z-50">
+                                        Required for creative and design fields to provide tangible proof of your work, demonstrating your skills, style, and expertise beyond a resume.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Profile Type Selection -->
+            <!-- Profile Type Section -->
             <div class="space-y-6">
-                <h2 class="text-2xl font-semibold text-gray-800 border-b pb-4">Select Profile</h2>
+                <div class="border-b-2 border-gray-200 pb-4">
+                    <div class="flex items-center space-x-2">
+                        <h2 class="text-xl md:text-2xl font-semibold text-gray-800">Select Profile</h2>
+                        <!-- Info icon with tooltip -->
+                        <div class="group relative">
+                            <svg class="w-5 h-5 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div class="hidden group-hover:block absolute right-0 -top-2 transform -translate-y-full w-80 p-3 bg-gray-700 text-white text-sm rounded-lg shadow-lg z-50">
+                                <p><strong>Student:</strong> Select this if you are applying for a job for the first time and do not have prior work experience.</p>
+                                <p><strong>Professional:</strong> Select this if you are already working and have prior work experience.</p>
+                                <div class="absolute -bottom-1 right-2 w-3 h-3 bg-gray-700 transform rotate-45"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="flex space-x-6">
                     <label class="flex items-center space-x-3 cursor-pointer">
                         <input type="radio" name="profileType" value="student" class="profileType h-5 w-5 text-blue-600" checked>
@@ -93,22 +191,40 @@
 
             <!-- Education Section -->
             <div id="educationSection" class="space-y-8">
-                <h2 class="text-2xl font-semibold text-gray-800 border-b pb-4">Education</h2>
+                <div class="border-b-2 border-gray-200 pb-4">
+                    <div class="flex items-center space-x-2">
+                        <h2 class="text-xl md:text-2xl font-semibold text-gray-800">Education</h2>
+                        <!-- Info icon with tooltip -->
+                        <div class="group relative">
+                            <svg class="w-5 h-5 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div class="hidden group-hover:block absolute right-0 -top-2 transform -translate-y-full w-80 p-3 bg-gray-700 text-white text-sm rounded-lg shadow-lg z-50">
+                                <p><strong>Required:</strong> Please provide your complete formal education details, from secondary education to Ph.D. if applicable. Only include formal academic qualifications—do not add individual courses.</p>
+                                <p><strong>Optional:</strong> Percentage/Grade/GPA (if applicable).</p>
+                                <div class="absolute -bottom-1 right-2 w-3 h-3 bg-gray-700 transform rotate-45"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="educationFields" class="space-y-6">
-                    <!-- Pre-filled mandatory education entry -->
                     <div class="education-entry border p-6 rounded-lg bg-gray-50 space-y-4">
-                        <div class="grid md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label class="block font-medium text-gray-700">University/College</label>
+                                <label class="block font-medium text-gray-700">School/College/University</label>
                                 <input type="text" name="institution[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter institution name" required>
                             </div>
                             <div class="space-y-2">
-                                <label class="block font-medium text-gray-700">Degree</label>
-                                <input type="text" name="degree[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Degree obtained" required>
+                                <label class="block font-medium text-gray-700">Academic Background and Qualification</label>
+                                <input type="text" name="degree[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Class 10/Class 12/UG/PG/Ph.D " required>
                             </div>
                             <div class="space-y-2">
                                 <label class="block font-medium text-gray-700">Year of Graduation</label>
                                 <input type="text" name="graduationYear[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Graduation year" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">Percentage/Grade/GPA</label>
+                                <input type="text" name="grade[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., 85%, 3.8 GPA">
                             </div>
                         </div>
                     </div>
@@ -120,26 +236,43 @@
 
             <!-- Student Section - Projects -->
             <div id="studentSection" class="space-y-8">
-                <h2 class="text-2xl font-semibold text-gray-800 border-b pb-4">Projects</h2>
+                <div class="border-b-2 border-gray-300 pb-4">
+                    <div class="flex items-center space-x-2">
+                        <h2 class="text-xl md:text-2xl font-semibold text-gray-800">Projects</h2>
+                        <!-- Info icon with tooltip -->
+                        <div class="group relative">
+                            <svg class="w-5 h-5 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div class="hidden group-hover:block absolute right-0 -top-2 transform -translate-y-full w-80 p-3 bg-gray-700 text-white text-sm rounded-lg shadow-lg z-50">
+                                <p><strong>Required:</strong> Project Title, Role, Duration, Contribution details and Technologies Used.</p>
+                                <div class="absolute -bottom-1 right-2 w-3 h-3 bg-gray-700 transform rotate-45"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="projectFields" class="space-y-6">
-                    <!-- Pre-filled mandatory project entry -->
                     <div class="project-entry border p-6 rounded-lg bg-gray-50 space-y-4">
-                        <div class="grid md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="block font-medium text-gray-700">Project Title</label>
-                                <input type="text" name="projectTitle[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter project title" >
+                                <input type="text" name="projectTitle[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter project title" required>
                             </div>
                             <div class="space-y-2">
                                 <label class="block font-medium text-gray-700">Role</label>
-                                <input type="text" name="projectRole[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Your role" >
+                                <input type="text" name="projectRole[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Your role" required>
                             </div>
                             <div class="space-y-2">
                                 <label class="block font-medium text-gray-700">Duration</label>
-                                <input type="text" name="projectDuration[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Jan 2023 - Present" >
+                                <input type="text" name="projectDuration[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Jan 2023 - Present" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">Technologies Used</label>
+                                <input type="text" name="technologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS" required>
                             </div>
                             <div class="md:col-span-2 space-y-2">
                                 <label class="block font-medium text-gray-700">Contribution</label>
-                                <textarea name="contribution[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Describe your contribution" rows="4" ></textarea>
+                                <textarea name="contribution[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Describe your contribution" rows="4"></textarea>
                             </div>
                         </div>
                     </div>
@@ -149,70 +282,118 @@
                 </button>
             </div>
 
-            <!-- Internship Section -->
-<div id="internshipStatus" class="space-y-6">
-    <h2 class="text-2xl font-semibold text-gray-800 border-b pb-4">Did you do an Internship?</h2>
-    <div class="flex space-x-6">
-        <label class="flex items-center space-x-3 cursor-pointer">
-            <input type="radio" name="internship" value="yes" class="internshipToggle h-5 w-5 text-blue-600">
-            <span class="text-gray-700">Yes</span>
-        </label>
-        <label class="flex items-center space-x-3 cursor-pointer">
-            <input type="radio" name="internship" value="no" class="internshipToggle h-5 w-5 text-blue-600" checked>
-            <span class="text-gray-700">No</span>
-        </label>
-    </div>
-</div>
-
-<!-- Internship Details -->
-<div id="internshipSection" class="hidden space-y-8">
-    <h2 class="text-2xl font-semibold text-gray-800 border-b pb-4">Internship Details</h2>
-    <div id="internshipFields" class="space-y-6">
-        <div class="internship-entry border p-6 rounded-lg bg-gray-50 space-y-4">
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="space-y-2">
-                    <label class="block font-medium text-gray-700">Organization</label>
-                    <input type="text" name="internship_organization[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter organization name">
+            <!-- Internship Status Section -->
+            <div id="internshipStatus" class="space-y-6">
+                <div class="border-b-2 border-gray-300 pb-4">
+                    <div class="flex items-center space-x-2">
+                        <h2 class="text-xl md:text-2xl font-semibold text-gray-800">Did you do an Internship?</h2>
+                        <!-- Info icon with tooltip -->
+                        <div class="group relative">
+                            <svg class="w-5 h-5 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div class="hidden group-hover:block absolute right-0 -top-2 transform -translate-y-full w-80 p-3 bg-gray-700 text-white text-sm rounded-lg shadow-lg z-50">
+                                <p>Select <strong>Yes</strong> if you have completed an internship. Otherwise, select <strong>No</strong>.</p>
+                                <div class="absolute -bottom-1 right-2 w-3 h-3 bg-gray-700 transform rotate-45"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="space-y-2">
-                    <label class="block font-medium text-gray-700">Role</label>
-                    <input type="text" name="internship_role[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter your role">
-                </div>
-                <div class="space-y-2">
-                    <label class="block font-medium text-gray-700">Duration</label>
-                    <input type="text" name="internship_duration[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., 3 months">
-                </div>
-                <div class="space-y-2">
-                    <label class="block font-medium text-gray-700">Contribution</label>
-                    <textarea name="internship_contribution[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Describe your contribution" rows="4"></textarea>
+                <div class="flex space-x-6">
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="radio" name="internship" value="yes" class="internshipToggle h-5 w-5 text-blue-600">
+                        <span class="text-gray-700">Yes</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="radio" name="internship" value="no" class="internshipToggle h-5 w-5 text-blue-600" checked>
+                        <span class="text-gray-700">No</span>
+                    </label>
                 </div>
             </div>
-            <button type="button" class="remove-entry mt-4 px-6 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition">Remove</button>
-        </div>
-    </div>
-    <button type="button" id="addInternshipBtn" class="w-full md:w-auto px-6 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
-        + Add Internship
-    </button>
-</div>
 
-            <!-- Professional Section - Work Experience -->
-            <div id="professionalSection" class="hidden space-y-8">
-                <h2 class="text-2xl font-semibold text-gray-800 border-b pb-4">Work Experience</h2>
-                <div id="experienceFields" class="space-y-6">
-                    <!-- Pre-filled mandatory work experience entry -->
-                    <div class="experience-entry border p-6 rounded-lg bg-gray-50 space-y-4">
-                        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Internship Details Section (Hidden by Default) -->
+            <div id="internshipSection" class="hidden space-y-8">
+                <div class="border-b-2 border-gray-300 pb-4">
+                    <div class="flex items-center space-x-2">
+                        <h2 class="text-xl md:text-2xl font-semibold text-gray-800">Internship Details</h2>
+                        <!-- Info icon with tooltip -->
+                        <div class="group relative">
+                            <svg class="w-5 h-5 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div class="hidden group-hover:block absolute right-0 -top-2 transform -translate-y-full w-80 p-3 bg-gray-700 text-white text-sm rounded-lg shadow-lg z-50">
+                                <p><strong>Required:</strong> Organization, Role, Duration, Contribution details and Technologies Used.</p>
+                                <div class="absolute -bottom-1 right-2 w-3 h-3 bg-gray-700 transform rotate-45"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="internshipFields" class="space-y-6">
+                    <div class="internship-entry border p-6 rounded-lg bg-gray-50 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label class="block font-medium text-gray-700">Company</label>
-                                <input type="text" name="company[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Company name" >
+                                <label class="block font-medium text-gray-700">Organization</label>
+                                <input type="text" name="internship_organization[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter organization name">
                             </div>
                             <div class="space-y-2">
-                                <label class="block font-medium text-gray-700">Job Title</label>
-                                <input type="text" name="jobTitle[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Job title">
+                                <label class="block font-medium text-gray-700">Role</label>
+                                <input type="text" name="internship_role[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter your role">
                             </div>
                             <div class="space-y-2">
                                 <label class="block font-medium text-gray-700">Duration</label>
-                                <input type="text" name="workDuration[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Jan 2020 - Present">
+                                <input type="text" name="internship_duration[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., 3 months">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">Technologies Used</label>
+                                <input type="text" name="technologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS">
+                            </div>
+                            <div class="md:col-span-2 space-y-2">
+                                <label class="block font-medium text-gray-700">Contribution</label>
+                                <textarea name="internship_contribution[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Describe your contribution" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="addInternshipBtn" class="w-full md:w-auto px-6 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
+                    + Add Internship
+                </button>
+            </div>
+
+            <!-- Work Experience Section -->
+            <div id="professionalSection" class="space-y-8">
+                <div class="border-b-2 border-gray-300 pb-4">
+                    <div class="flex items-center space-x-2">
+                        <h2 class="text-xl md:text-2xl font-semibold text-gray-800">Work Experience</h2>
+                        <!-- Info icon with tooltip -->
+                        <div class="group relative">
+                            <svg class="w-5 h-5 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div class="hidden group-hover:block absolute right-0 -top-2 transform -translate-y-full w-80 p-3 bg-gray-700 text-white text-sm rounded-lg shadow-lg z-50">
+                                <p><strong>Required:</strong> Company, Job Title, Duration, Responsibilities and Technologies Used.</p>
+                                <div class="absolute -bottom-1 right-2 w-3 h-3 bg-gray-700 transform rotate-45"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="experienceFields" class="space-y-6">
+                    <div class="experience-entry border p-6 rounded-lg bg-gray-50 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">Company</label>
+                                <input type="text" name="company[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Company name" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">Job Title</label>
+                                <input type="text" name="jobTitle[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Job title" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">Duration</label>
+                                <input type="text" name="workDuration[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Jan 2020 - Present" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">Technologies Used</label>
+                                <input type="text" name="technologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS" required>
                             </div>
                             <div class="md:col-span-2 space-y-2">
                                 <label class="block font-medium text-gray-700">Responsibilities</label>
@@ -228,39 +409,44 @@
 
             <!-- Desired Role and Desired Company Section -->
             <div class="space-y-4">
-                <label class="block text-2xl font-semibold text-gray-800 border-b pb-4">Desired Role</label>
+                <label class="block text-xl md:text-2xl font-semibold text-gray-800 border-b pb-4">Desired Role</label>
                 <input type="text" name="desiredRole" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter your desired role" required>
 
-                <!-- Add Desired Company Field -->
-                <label class="block text-2xl font-semibold text-gray-800 border-b pb-4 mt-8">Desired Company</label>
+                <label class="block text-xl md:text-2xl font-semibold text-gray-800 border-b pb-4 mt-8">Desired Company</label>
                 <input type="text" name="desiredCompany" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter your desired company">
             </div>
 
-                        <!-- Achievements & Certifications -->
-                        <div class="space-y-8">
-                            <h2 class="text-2xl font-semibold text-gray-800 border-b pb-4">Achievements & Certifications</h2>
-                            
-                            <!-- Achievements -->
-                            <div class="space-y-8">
-                                <div id="achievementsFields" class="space-y-6">
-                                    <!-- Achievement entries will be added here dynamically -->
-                                </div>
-                                <button type="button" id="addAchievementBtn" class="w-full md:w-auto px-6 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
-                                    + Add Achievement
-                                </button>
-                            </div>
-            
-                            <!-- Certifications -->
-                            <div class="space-y-8">
-                                <div id="certificationsFields" class="space-y-6">
-                                    <!-- Certification entries will be added here dynamically -->
-                                </div>
-                                <button type="button" id="addCertificationBtn" class="w-full md:w-auto px-6 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
-                                    + Add Certification
-                                </button>
-                            </div>
-                        </div>
-            
+            <!-- Publications Section -->
+            <div class="space-y-8">
+                <h2 class="text-xl md:text-2xl font-semibold text-gray-800 border-b pb-4">Publications</h2>
+                <div id="publicationsFields" class="space-y-6">
+                    <!-- Publication entries will be added here dynamically -->
+                </div>
+                <button type="button" id="addPublicationBtn" class="w-full md:w-auto px-6 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
+                    + Add Publication
+                </button>
+            </div>
+
+            <!-- Achievements & Certifications -->
+            <div class="space-y-8">
+                <h2 class="text-xl md:text-2xl font-semibold text-gray-800 border-b pb-4">Achievements & Certifications</h2>
+                <div class="space-y-8">
+                    <div id="achievementsFields" class="space-y-6">
+                        <!-- Achievement entries will be added here dynamically -->
+                    </div>
+                    <button type="button" id="addAchievementBtn" class="w-full md:w-auto px-6 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
+                        + Add Achievement
+                    </button>
+                </div>
+                <div class="space-y-8">
+                    <div id="certificationsFields" class="space-y-6">
+                        <!-- Certification entries will be added here dynamically -->
+                    </div>
+                    <button type="button" id="addCertificationBtn" class="w-full md:w-auto px-6 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
+                        + Add Certification
+                    </button>
+                </div>
+            </div>
 
             <!-- Submit Button -->
             <div class="pt-8">
@@ -275,11 +461,52 @@
     </main>
 
     <!-- Footer Section -->
-    <footer class="bg-gray-900 text-gray-300 py-12 px-8 mt-20">
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-gray-300 py-12 px-8">
         <div class="container mx-auto grid md:grid-cols-4 gap-8">
-            <!-- Footer content remains the same -->
+            
+            <!-- Company Info -->
+            <div>
+                <h3 class="footer-title">ResumePro</h3>
+                <p class="footer-text">AI-powered resume optimization to boost your career.</p>
+            </div>
+    
+            <!-- Quick Links -->
+            <div>
+                <h3 class="footer-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#faqs">FAQs</a></li>
+                </ul>
+            </div>
+    
+            <!-- Legal & Policies -->
+            <div>
+                <h3 class="footer-title">Legal & Policies</h3>
+                <ul class="footer-links">
+                    <li><a href="legal.html#about">About Us</a></li>
+                    <li><a href="legal.html#privacy">Privacy Policy</a></li>
+                    <li><a href="legal.html#terms">Terms of Service</a></li>
+                    <li><a href="legal.html">Advertise With Us</a></li>
+                </ul>
+            </div>
+    
+            <!-- Contact Info -->
+            <div>
+                <h3 class="footer-title">Contact Us</h3>
+                <ul class="footer-links">
+                    <li>Email: <a href="mailto:support@resumepro.com">support@resumepro.com</a></li>
+                    <li>Phone: +1 234 567 890</li>
+                </ul>
+            </div>
+    
         </div>
-    </footer>
+    
+        <div class="text-center text-gray-500 text-sm mt-8">
+            &copy; 2025 ResumePro. All rights reserved.
+        </div>
 
     <script src="profiles.js"></script>
 </body>
