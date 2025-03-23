@@ -9,16 +9,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const addExperienceBtn = document.getElementById("addExperienceBtn");
     const addAchievementBtn = document.getElementById("addAchievementBtn");
     const addCertificationBtn = document.getElementById("addCertificationBtn");
+    const addPublicationBtn = document.getElementById("addPublicationBtn");
     const educationFields = document.getElementById("educationFields");
     const projectFields = document.getElementById("projectFields");
     const experienceFields = document.getElementById("experienceFields");
     const achievementsFields = document.getElementById("achievementsFields");
     const certificationsFields = document.getElementById("certificationsFields");
+    const publicationsFields = document.getElementById("publicationsFields");
     const internshipStatus = document.getElementById("internshipStatus");
     const initialProfileType = document.querySelector('input[name="profileType"]:checked').value;
+    const mobileMenuButton = document.getElementById("mobileMenuButton");
+    const mobileMenu = document.getElementById("mobileMenu");
 
+    mobileMenuButton.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent default behavior
+        console.log("Button clicked"); // Debugging: Check if this logs in the console
+
+        // Toggle the mobile menu visibility
+        mobileMenu.classList.toggle("hidden");
+    });
+    // Initialize visibility based on profile type
     toggleRequiredAttributes(studentSection, initialProfileType === "student");
     toggleRequiredAttributes(professionalSection, initialProfileType === "professional");
+    professionalSection.classList.toggle("hidden", initialProfileType !== "professional");
 
     // Toggle between student and professional profiles
     document.querySelectorAll('.profileType').forEach(radio => {
@@ -28,17 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
             // Show/hide sections
             studentSection.classList.toggle("hidden", !isStudent);
             professionalSection.classList.toggle("hidden", isStudent);
+            internshipStatus.classList.toggle("hidden", !isStudent);
+            internshipSection.classList.add("hidden");
 
             // Toggle required attributes
             toggleRequiredAttributes(studentSection, isStudent);
-            toggleRequiredAttributes(professionalSection, !isStudent); // Fix here
-
-            // Hide internship section
-            internshipStatus.classList.toggle("hidden", !isStudent);
-            internshipSection.classList.add("hidden");
+            toggleRequiredAttributes(professionalSection, !isStudent);
         });
     });
-
 
     // Function to toggle required attributes
     function toggleRequiredAttributes(section, isRequired) {
@@ -52,35 +62,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Toggle between student and professional profiles
-    document.querySelectorAll('.profileType').forEach(radio => {
-        radio.addEventListener("change", function () {
-            const isStudent = this.value === "student";
-
-            // Show/hide sections based on profile type
-            studentSection.classList.toggle("hidden", !isStudent);
-            professionalSection.classList.toggle("hidden", isStudent);
-
-            // Toggle required attributes for student and professional sections
-            toggleRequiredAttributes(studentSection, isStudent);
-            toggleRequiredAttributes(professionalSection, !isStudent);
-
-            // Hide internship toggle for professionals
-            internshipStatus.classList.toggle("hidden", !isStudent);
-            internshipSection.classList.toggle("hidden", true); // Hide internship section by default
-        });
-    });
-
     // Toggle Internship Section Visibility
     document.querySelectorAll('.internshipToggle').forEach(radio => {
         radio.addEventListener("change", function () {
             const showInternship = this.value === "yes";
-
-            // Show/hide internship fields and button
             internshipSection.classList.toggle("hidden", !showInternship);
             addInternshipBtn.classList.toggle("hidden", !showInternship);
-
-            // Toggle required attributes for internship fields
             toggleRequiredAttributes(internshipSection, showInternship);
         });
     });
@@ -102,6 +89,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="space-y-2">
                     <label class="block font-medium text-gray-700">Year of Graduation</label>
                     <input type="text" name="graduationYear[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Graduation year" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Percentage/Grade/GPA</label>
+                    <input type="text" name="grade[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., 85%, 3.8 GPA">
                 </div>
             </div>
             <button type="button" class="remove-entry mt-4 px-6 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition">Remove</button>
@@ -126,6 +117,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="space-y-2">
                     <label class="block font-medium text-gray-700">Duration</label>
                     <input type="text" name="projectDuration[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Jan 2023 - Present" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Technologies Used</label>
+                    <input type="text" name="technologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS" required>
                 </div>
                 <div class="md:col-span-2 space-y-2">
                     <label class="block font-medium text-gray-700">Contribution</label>
@@ -154,6 +149,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="space-y-2">
                     <label class="block font-medium text-gray-700">Duration</label>
                     <input type="text" name="workDuration[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Jan 2020 - Present" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Technologies Used</label>
+                    <input type="text" name="technologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS" required>
                 </div>
                 <div class="md:col-span-2 space-y-2">
                     <label class="block font-medium text-gray-700">Responsibilities</label>
@@ -184,6 +183,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     <input type="text" name="internship_duration[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., 3 months" required>
                 </div>
                 <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Technologies Used</label>
+                    <input type="text" name="technologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS">
+                </div>
+                <div class="md:col-span-2 space-y-2">
                     <label class="block font-medium text-gray-700">Contribution</label>
                     <textarea name="internship_contribution[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Describe your contribution" rows="4" required></textarea>
                 </div>
@@ -254,14 +257,38 @@ document.addEventListener("DOMContentLoaded", () => {
         certificationsFields.appendChild(newEntry);
     });
 
+    // Add Publication Entry
+    addPublicationBtn.addEventListener("click", () => {
+        const newEntry = document.createElement("div");
+        newEntry.classList.add("publication-entry", "border", "p-6", "rounded-lg", "bg-gray-50", "space-y-4");
+        newEntry.innerHTML = `
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Title</label>
+                    <input type="text" name="publicationTitle[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter publication title">
+                </div>
+                <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Authors</label>
+                    <input type="text" name="publicationAuthors[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter authors">
+                </div>
+                <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Link</label>
+                    <input type="url" name="publicationLink[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter publication link">
+                </div>
+            </div>
+            <button type="button" class="remove-entry mt-4 px-6 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition">Remove</button>
+        `;
+        publicationsFields.appendChild(newEntry);
+    });
+
     // Remove Entry
     document.addEventListener("click", (e) => {
         if (e.target.classList.contains("remove-entry")) {
-            const entry = e.target.closest(".education-entry, .project-entry, .experience-entry, .internship-entry, .achievement-entry, .certification-entry");
+            const entry = e.target.closest(".education-entry, .project-entry, .experience-entry, .internship-entry, .achievement-entry, .certification-entry, .publication-entry");
             const parent = entry.parentElement;
 
-            // Check if the field is optional (achievements or certifications) or an extra field
-            if (entry.classList.contains("achievement-entry") || entry.classList.contains("certification-entry")) {
+            // Check if the field is optional (achievements, certifications, or publications) or an extra field
+            if (entry.classList.contains("achievement-entry") || entry.classList.contains("certification-entry") || entry.classList.contains("publication-entry")) {
                 // Always allow removal of optional fields
                 entry.remove();
             } else if (parent.children.length > 1) {
@@ -273,120 +300,133 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-// Form Submission
-resumeForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+    // Form Submission
+    resumeForm.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-    // Collect form data
-    const formData = new FormData(resumeForm);
-    const formDataObj = {};
+        // Collect form data
+        const formData = new FormData(resumeForm);
+        const formDataObj = {};
 
-    // Convert FormData to object
-    for (let [key, value] of formData.entries()) {
-        if (key.endsWith('[]')) {
-            const cleanKey = key.slice(0, -2);
-            if (!formDataObj[cleanKey]) {
-                formDataObj[cleanKey] = [];
+        // Convert FormData to object
+        for (let [key, value] of formData.entries()) {
+            if (key.endsWith('[]')) {
+                const cleanKey = key.slice(0, -2);
+                if (!formDataObj[cleanKey]) {
+                    formDataObj[cleanKey] = [];
+                }
+                formDataObj[cleanKey].push(value);
+            } else {
+                formDataObj[key] = value;
             }
-            formDataObj[cleanKey].push(value);
-        } else {
-            formDataObj[key] = value;
         }
-    }
 
-    // Construct final JSON object
-    const finalData = {
-        name: formDataObj.name,
-        email: formDataObj.email,
-        phone: formDataObj.phone,
-        linkedin: formDataObj.linkedin, // Add LinkedIn Profile
-        github: formDataObj.github, // Add GitHub Profile
-        website: formDataObj.website, // Add Personal Website
-        profileType: formDataObj.profileType,
-        desiredRole: formDataObj.desiredRole,
-        desiredCompany: formDataObj.desiredCompany,
-        education: [],
-        projects: [],
-        internships: [],
-        experience: [],
-        achievements: [],
-        certifications: [],
-    };
+        // Construct final JSON object
+        const finalData = {
+            name: formDataObj.name,
+            email: formDataObj.email,
+            phone: formDataObj.phone,
+            linkedin: formDataObj.linkedin,
+            github: formDataObj.github,
+            website: formDataObj.website,
+            profileType: formDataObj.profileType,
+            desiredRole: formDataObj.desiredRole,
+            desiredCompany: formDataObj.desiredCompany,
+            education: [],
+            projects: [],
+            internships: [],
+            experience: [],
+            achievements: [],
+            certifications: [],
+            publications: [],
+        };
 
-    // Group education
-    if (formDataObj.institution) {
-        for (let i = 0; i < formDataObj.institution.length; i++) {
-            finalData.education.push({
-                institution: formDataObj.institution[i],
-                degree: formDataObj.degree[i],
-                graduationYear: formDataObj.graduationYear[i],
-            });
+        // Group education
+        if (formDataObj.institution) {
+            for (let i = 0; i < formDataObj.institution.length; i++) {
+                finalData.education.push({
+                    institution: formDataObj.institution[i],
+                    degree: formDataObj.degree[i],
+                    graduationYear: formDataObj.graduationYear[i],
+                    grade: formDataObj.grade[i],
+                });
+            }
         }
-    }
 
-    // Group projects (only for students)
-    if (formDataObj.profileType === "student" && formDataObj.projectTitle) {
-        for (let i = 0; i < formDataObj.projectTitle.length; i++) {
-            finalData.projects.push({
-                projectTitle: formDataObj.projectTitle[i],
-                projectRole: formDataObj.projectRole[i],
-                projectDuration: formDataObj.projectDuration[i],
-                contribution: formDataObj.contribution[i],
-            });
+        // Group projects (only for students)
+        if (formDataObj.profileType === "student" && formDataObj.projectTitle) {
+            for (let i = 0; i < formDataObj.projectTitle.length; i++) {
+                finalData.projects.push({
+                    projectTitle: formDataObj.projectTitle[i],
+                    projectRole: formDataObj.projectRole[i],
+                    projectDuration: formDataObj.projectDuration[i],
+                    contribution: formDataObj.contribution[i],
+                });
+            }
         }
-    }
 
-    // Group internships (only for students)
-    if (formDataObj.profileType === "student" && formDataObj.internship === "yes" && formDataObj.internship_organization) {
-        for (let i = 0; i < formDataObj.internship_organization.length; i++) {
-            finalData.internships.push({
-                organization: formDataObj.internship_organization[i],
-                role: formDataObj.internship_role[i],
-                duration: formDataObj.internship_duration[i],
-                contribution: formDataObj.internship_contribution[i],
-            });
+        // Group internships (only for students)
+        if (formDataObj.profileType === "student" && formDataObj.internship === "yes" && formDataObj.internship_organization) {
+            for (let i = 0; i < formDataObj.internship_organization.length; i++) {
+                finalData.internships.push({
+                    organization: formDataObj.internship_organization[i],
+                    role: formDataObj.internship_role[i],
+                    duration: formDataObj.internship_duration[i],
+                    contribution: formDataObj.internship_contribution[i],
+                });
+            }
         }
-    }
 
-    // Group work experience (only for professionals)
-    if (formDataObj.profileType === "professional" && formDataObj.company) {
-        for (let i = 0; i < formDataObj.company.length; i++) {
-            finalData.experience.push({
-                company: formDataObj.company[i],
-                jobTitle: formDataObj.jobTitle[i],
-                workDuration: formDataObj.workDuration[i],
-                responsibilities: formDataObj.responsibilities[i],
-            });
+        // Group work experience (only for professionals)
+        if (formDataObj.profileType === "professional" && formDataObj.company) {
+            for (let i = 0; i < formDataObj.company.length; i++) {
+                finalData.experience.push({
+                    company: formDataObj.company[i],
+                    jobTitle: formDataObj.jobTitle[i],
+                    workDuration: formDataObj.workDuration[i],
+                    responsibilities: formDataObj.responsibilities[i],
+                });
+            }
         }
-    }
 
-    // Group achievements
-    if (formDataObj.achievementTitle) {
-        for (let i = 0; i < formDataObj.achievementTitle.length; i++) {
-            finalData.achievements.push({
-                title: formDataObj.achievementTitle[i],
-                date: formDataObj.achievementDate[i],
-                description: formDataObj.achievementDescription[i],
-            });
+        // Group achievements
+        if (formDataObj.achievementTitle) {
+            for (let i = 0; i < formDataObj.achievementTitle.length; i++) {
+                finalData.achievements.push({
+                    title: formDataObj.achievementTitle[i],
+                    date: formDataObj.achievementDate[i],
+                    description: formDataObj.achievementDescription[i],
+                });
+            }
         }
-    }
 
-    // Group certifications
-    if (formDataObj.certificationTitle) {
-        for (let i = 0; i < formDataObj.certificationTitle.length; i++) {
-            finalData.certifications.push({
-                title: formDataObj.certificationTitle[i],
-                issuer: formDataObj.certificationIssuer[i],
-                date: formDataObj.certificationDate[i],
-                certificateNumber: formDataObj.certificationNumber[i],
-                validity: formDataObj.certificationValidity[i],
-            });
+        // Group certifications
+        if (formDataObj.certificationTitle) {
+            for (let i = 0; i < formDataObj.certificationTitle.length; i++) {
+                finalData.certifications.push({
+                    title: formDataObj.certificationTitle[i],
+                    issuer: formDataObj.certificationIssuer[i],
+                    date: formDataObj.certificationDate[i],
+                    certificateNumber: formDataObj.certificationNumber[i],
+                    validity: formDataObj.certificationValidity[i],
+                });
+            }
         }
-    }
 
-    console.log('Form submitted:', finalData);
-    downloadObjectAsJson(finalData, "resume-data");
-});
+        // Group publications
+        if (formDataObj.publicationTitle) {
+            for (let i = 0; i < formDataObj.publicationTitle.length; i++) {
+                finalData.publications.push({
+                    title: formDataObj.publicationTitle[i],
+                    authors: formDataObj.publicationAuthors[i],
+                    link: formDataObj.publicationLink[i],
+                });
+            }
+        }
+
+        console.log('Form submitted:', finalData);
+        downloadObjectAsJson(finalData, "resume-data");
+    });
 
     // Helper function to download data as a JSON file
     function downloadObjectAsJson(exportObj, exportName) {
@@ -397,4 +437,5 @@ resumeForm.addEventListener("submit", function (e) {
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
-    }});
+    }
+});
