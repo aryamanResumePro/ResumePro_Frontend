@@ -10,15 +10,36 @@
 <body class="bg-[#e5e7eb]">
 
     <!-- Floating Navbar -->
-    <nav id="navbar" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-full px-6 py-3 flex justify-between items-center w-3/4 z-50 transition-all duration-300">
-        <div class="text-2xl font-bold text-blue-600">ResumePro</div>
-        <div class="space-x-6">
-            <a href="#features" class="nav-link">Features</a>
-            <a href="#how-it-works" class="nav-link">How It Works</a>
-            <a href="#faqs" class="nav-link">FAQs</a>
-            <a href="profile.html" class="nav-link bg-blue-600 text-white px-4 py-2 rounded-full">Get Started</a>
+    <nav id="navbar" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-full px-4 py-2 flex justify-between items-center w-11/12 md:w-3/4 z-50 transition-all duration-300">
+        <div class="text-xl md:text-2xl font-bold text-blue-600">ResumePro</div>
+        
+        <!-- Hamburger Menu for Mobile -->
+        <button id="mobileMenuButton" type="button" class="md:hidden p-2 focus:outline-none">
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </button>
+
+        <!-- Nav Links (Hidden on Mobile, Visible on Desktop) -->
+        <div id="navLinks" class="hidden md:flex justify-center items-center space-x-6">
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Home</a>
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">FAQs</a>
+            <a href="profile.html" class="nav-link bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">Get Started</a>
         </div>
     </nav>
+
+    <!-- Mobile Menu (Hidden by Default) -->
+    <div id="mobileMenu" class="md:hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-lg w-11/12 z-50 hidden">
+        <div class="flex flex-col space-y-4 p-6 text-center"> <!-- Centered text -->
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Home</a>
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">FAQs</a>
+            <a href="profile.html" class="nav-link bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">Get Started</a>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero flex flex-col md:flex-row items-center justify-center text-center md:text-left py-32">
