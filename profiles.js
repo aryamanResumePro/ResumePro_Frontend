@@ -20,35 +20,57 @@ document.addEventListener("DOMContentLoaded", () => {
     const initialProfileType = document.querySelector('input[name="profileType"]:checked').value;
     const mobileMenuButton = document.getElementById("mobileMenuButton");
     const mobileMenu = document.getElementById("mobileMenu");
+    const generateCoverLetterCheckbox = document.getElementById('generateCoverLetter');
+    const agreeTermsCheckbox = document.getElementById('agreeTerms');
 
+    // Mobile menu toggle
     mobileMenuButton.addEventListener("click", (e) => {
-        e.preventDefault(); // Prevent default behavior
-        console.log("Button clicked"); // Debugging: Check if this logs in the console
-
-        // Toggle the mobile menu visibility
+        e.preventDefault();
         mobileMenu.classList.toggle("hidden");
     });
+
     // Initialize visibility based on profile type
     toggleRequiredAttributes(studentSection, initialProfileType === "student");
     toggleRequiredAttributes(professionalSection, initialProfileType === "professional");
     professionalSection.classList.toggle("hidden", initialProfileType !== "professional");
 
+    // Cover Letter Popup
+    generateCoverLetterCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            showCoverLetterPopup();
+        }
+    });
+
+    function showCoverLetterPopup() {
+        const popup = document.createElement('div');
+        popup.className = 'cover-letter-popup';
+        popup.textContent = 'Cover letter will be generated with your resume.';
+        document.body.appendChild(popup);
+        
+        setTimeout(() => {
+            popup.remove();
+        }, 5000);
+    }
+
     // Toggle between student and professional profiles
     document.querySelectorAll('.profileType').forEach(radio => {
-        radio.addEventListener("change", function () {
+        radio.addEventListener("change", function() {
             const isStudent = this.value === "student";
-
-            // Show/hide sections
             studentSection.classList.toggle("hidden", !isStudent);
             professionalSection.classList.toggle("hidden", isStudent);
             internshipStatus.classList.toggle("hidden", !isStudent);
             internshipSection.classList.add("hidden");
-
-            // Toggle required attributes
             toggleRequiredAttributes(studentSection, isStudent);
             toggleRequiredAttributes(professionalSection, !isStudent);
         });
     });
+    
+    // In your form submission handler:
+    const finalData = {
+        // ... other fields ...
+        profileType: formDataObj.profileType, // This will be either "student" or "professional"
+        // ... other fields ...
+    };
 
     // Function to toggle required attributes
     function toggleRequiredAttributes(section, isRequired) {
@@ -64,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Toggle Internship Section Visibility
     document.querySelectorAll('.internshipToggle').forEach(radio => {
-        radio.addEventListener("change", function () {
+        radio.addEventListener("change", function() {
             const showInternship = this.value === "yes";
             internshipSection.classList.toggle("hidden", !showInternship);
             addInternshipBtn.classList.toggle("hidden", !showInternship);
@@ -287,12 +309,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const entry = e.target.closest(".education-entry, .project-entry, .experience-entry, .internship-entry, .achievement-entry, .certification-entry, .publication-entry");
             const parent = entry.parentElement;
 
-            // Check if the field is optional (achievements, certifications, or publications) or an extra field
             if (entry.classList.contains("achievement-entry") || entry.classList.contains("certification-entry") || entry.classList.contains("publication-entry")) {
-                // Always allow removal of optional fields
                 entry.remove();
             } else if (parent.children.length > 1) {
-                // Allow removal of extra fields (not the default one)
                 entry.remove();
             } else {
                 alert("Default fields cannot be removed.");
@@ -301,132 +320,166 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Form Submission
-    resumeForm.addEventListener("submit", function (e) {
-        e.preventDefault();
+   // Form Submission
+resumeForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-        // Collect form data
-        const formData = new FormData(resumeForm);
-        const formDataObj = {};
+    // Check if terms are agreed to
+    if (!agreeTermsCheckbox.checked) {
+        alert('You must agree to the Terms of Use and Privacy Policy to continue.');
+        return;
+    }
 
-        // Convert FormData to object
-        for (let [key, value] of formData.entries()) {
-            if (key.endsWith('[]')) {
-                const cleanKey = key.slice(0, -2);
-                if (!formDataObj[cleanKey]) {
-                    formDataObj[cleanKey] = [];
-                }
-                formDataObj[cleanKey].push(value);
-            } else {
-                formDataObj[key] = value;
+    // Collect form data and construct finalData object (same as before)
+    const formData = new FormData(resumeForm);
+    const formDataObj = {};
+
+    // Convert FormData to object
+    for (let [key, value] of formData.entries()) {
+        if (key.endsWith('[]')) {
+            const cleanKey = key.slice(0, -2);
+            if (!formDataObj[cleanKey]) {
+                formDataObj[cleanKey] = [];
             }
+            formDataObj[cleanKey].push(value);
+        } else {
+            formDataObj[key] = value;
+        }
+    }
+
+    // Construct final JSON object (same as before)
+    const finalData = {
+        name: formDataObj.name,
+        email: formDataObj.email,
+        phone: formDataObj.phone,
+        linkedin: formDataObj.linkedin,
+        github: formDataObj.github,
+        website: formDataObj.website,
+        profileType: formDataObj.profileType,
+        desiredRole: formDataObj.desiredRole,
+        desiredCompany: formDataObj.desiredCompany,
+        generateCoverLetter: formDataObj.generateCoverLetter === "on",
+        agreedToTerms: true,
+        education: [],
+        projects: [],
+        internships: [],
+        experience: [],
+        achievements: [],
+        certifications: [],
+        publications: [],
+    };
+
+    // Group education (same as before)
+    if (formDataObj.institution) {
+        for (let i = 0; i < formDataObj.institution.length; i++) {
+            finalData.education.push({
+                institution: formDataObj.institution[i],
+                degree: formDataObj.degree[i],
+                graduationYear: formDataObj.graduationYear[i],
+                grade: formDataObj.grade[i],
+            });
+        }
+    }
+
+    // Group projects (same as before)
+    if (formDataObj.profileType === "student" && formDataObj.projectTitle) {
+        for (let i = 0; i < formDataObj.projectTitle.length; i++) {
+            finalData.projects.push({
+                projectTitle: formDataObj.projectTitle[i],
+                projectRole: formDataObj.projectRole[i],
+                projectDuration: formDataObj.projectDuration[i],
+                contribution: formDataObj.contribution[i],
+            });
+        }
+    }
+
+    // Group internships (same as before)
+    if (formDataObj.profileType === "student" && formDataObj.internship === "yes" && formDataObj.internship_organization) {
+        for (let i = 0; i < formDataObj.internship_organization.length; i++) {
+            finalData.internships.push({
+                organization: formDataObj.internship_organization[i],
+                role: formDataObj.internship_role[i],
+                duration: formDataObj.internship_duration[i],
+                contribution: formDataObj.internship_contribution[i],
+            });
+        }
+    }
+
+    // Group work experience (same as before)
+    if (formDataObj.profileType === "professional" && formDataObj.company) {
+        for (let i = 0; i < formDataObj.company.length; i++) {
+            finalData.experience.push({
+                company: formDataObj.company[i],
+                jobTitle: formDataObj.jobTitle[i],
+                workDuration: formDataObj.workDuration[i],
+                responsibilities: formDataObj.responsibilities[i],
+            });
+        }
+    }
+
+    // Group achievements (same as before)
+    if (formDataObj.achievementTitle) {
+        for (let i = 0; i < formDataObj.achievementTitle.length; i++) {
+            finalData.achievements.push({
+                title: formDataObj.achievementTitle[i],
+                date: formDataObj.achievementDate[i],
+                description: formDataObj.achievementDescription[i],
+            });
+        }
+    }
+
+    // Group certifications (same as before)
+    if (formDataObj.certificationTitle) {
+        for (let i = 0; i < formDataObj.certificationTitle.length; i++) {
+            finalData.certifications.push({
+                title: formDataObj.certificationTitle[i],
+                issuer: formDataObj.certificationIssuer[i],
+                date: formDataObj.certificationDate[i],
+                certificateNumber: formDataObj.certificationNumber[i],
+                validity: formDataObj.certificationValidity[i],
+            });
+        }
+    }
+
+    // Group publications (same as before)
+    if (formDataObj.publicationTitle) {
+        for (let i = 0; i < formDataObj.publicationTitle.length; i++) {
+            finalData.publications.push({
+                title: formDataObj.publicationTitle[i],
+                authors: formDataObj.publicationAuthors[i],
+                link: formDataObj.publicationLink[i],
+            });
+        }
+    }
+
+    try {
+        // Send data to your endpoint
+        const response = await fetch('http://192.168.1.10:8002/getData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(finalData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Construct final JSON object
-        const finalData = {
-            name: formDataObj.name,
-            email: formDataObj.email,
-            phone: formDataObj.phone,
-            linkedin: formDataObj.linkedin,
-            github: formDataObj.github,
-            website: formDataObj.website,
-            profileType: formDataObj.profileType,
-            desiredRole: formDataObj.desiredRole,
-            desiredCompany: formDataObj.desiredCompany,
-            education: [],
-            projects: [],
-            internships: [],
-            experience: [],
-            achievements: [],
-            certifications: [],
-            publications: [],
-        };
-
-        // Group education
-        if (formDataObj.institution) {
-            for (let i = 0; i < formDataObj.institution.length; i++) {
-                finalData.education.push({
-                    institution: formDataObj.institution[i],
-                    degree: formDataObj.degree[i],
-                    graduationYear: formDataObj.graduationYear[i],
-                    grade: formDataObj.grade[i],
-                });
-            }
-        }
-
-        // Group projects (only for students)
-        if (formDataObj.profileType === "student" && formDataObj.projectTitle) {
-            for (let i = 0; i < formDataObj.projectTitle.length; i++) {
-                finalData.projects.push({
-                    projectTitle: formDataObj.projectTitle[i],
-                    projectRole: formDataObj.projectRole[i],
-                    projectDuration: formDataObj.projectDuration[i],
-                    contribution: formDataObj.contribution[i],
-                });
-            }
-        }
-
-        // Group internships (only for students)
-        if (formDataObj.profileType === "student" && formDataObj.internship === "yes" && formDataObj.internship_organization) {
-            for (let i = 0; i < formDataObj.internship_organization.length; i++) {
-                finalData.internships.push({
-                    organization: formDataObj.internship_organization[i],
-                    role: formDataObj.internship_role[i],
-                    duration: formDataObj.internship_duration[i],
-                    contribution: formDataObj.internship_contribution[i],
-                });
-            }
-        }
-
-        // Group work experience (only for professionals)
-        if (formDataObj.profileType === "professional" && formDataObj.company) {
-            for (let i = 0; i < formDataObj.company.length; i++) {
-                finalData.experience.push({
-                    company: formDataObj.company[i],
-                    jobTitle: formDataObj.jobTitle[i],
-                    workDuration: formDataObj.workDuration[i],
-                    responsibilities: formDataObj.responsibilities[i],
-                });
-            }
-        }
-
-        // Group achievements
-        if (formDataObj.achievementTitle) {
-            for (let i = 0; i < formDataObj.achievementTitle.length; i++) {
-                finalData.achievements.push({
-                    title: formDataObj.achievementTitle[i],
-                    date: formDataObj.achievementDate[i],
-                    description: formDataObj.achievementDescription[i],
-                });
-            }
-        }
-
-        // Group certifications
-        if (formDataObj.certificationTitle) {
-            for (let i = 0; i < formDataObj.certificationTitle.length; i++) {
-                finalData.certifications.push({
-                    title: formDataObj.certificationTitle[i],
-                    issuer: formDataObj.certificationIssuer[i],
-                    date: formDataObj.certificationDate[i],
-                    certificateNumber: formDataObj.certificationNumber[i],
-                    validity: formDataObj.certificationValidity[i],
-                });
-            }
-        }
-
-        // Group publications
-        if (formDataObj.publicationTitle) {
-            for (let i = 0; i < formDataObj.publicationTitle.length; i++) {
-                finalData.publications.push({
-                    title: formDataObj.publicationTitle[i],
-                    authors: formDataObj.publicationAuthors[i],
-                    link: formDataObj.publicationLink[i],
-                });
-            }
-        }
-
-        console.log('Form submitted:', finalData);
+        const result = await response.json();
+        console.log('Success:', result);
+        
+        // Optionally download the JSON file after successful submission
         downloadObjectAsJson(finalData, "resume-data");
-    });
+        
+        // Show success message to user
+        alert('Resume data successfully submitted!');
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('There was an error submitting your data. Please try again.');
+    }
+});
 
     // Helper function to download data as a JSON file
     function downloadObjectAsJson(exportObj, exportName) {
