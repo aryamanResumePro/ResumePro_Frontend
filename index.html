@@ -3,199 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATS Resume Builder</title>
+    <title>ATS Resume Builder - AI-Powered Resume Optimization | ResumePro</title>
+    <meta name="description" content="Create ATS-friendly resumes with ResumePro's AI-powered builder. Optimize your resume to pass applicant tracking systems and land more interviews.">
+    <meta name="keywords" content="ATS resume, resume builder, AI resume optimization, job application, ATS-friendly resume, applicant tracking system, professional resume">
+    <meta name="author" content="ResumePro">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="ATS Resume Builder - AI-Powered Resume Optimization | ResumePro">
+    <meta property="og:description" content="Create ATS-friendly resumes with ResumePro's AI-powered builder. Optimize your resume to pass applicant tracking systems and land more interviews.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.resumepro.com">
+    <meta property="og:image" content="https://www.resumepro.com/assets/og-image.jpg">
+    <meta property="og:site_name" content="ResumePro">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ATS Resume Builder - AI-Powered Resume Optimization">
+    <meta name="twitter:description" content="Create ATS-friendly resumes with ResumePro's AI-powered builder. Land more interviews with optimized resumes.">
+    <meta name="twitter:image" content="https://www.resumepro.com/assets/twitter-card.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.resumepro.com">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-[#e5e7eb]">
-
     <!-- Floating Navbar -->
-    <nav id="navbar" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-full px-4 py-2 flex justify-between items-center w-11/12 md:w-3/4 z-50 transition-all duration-300">
-        <div class="text-xl md:text-2xl font-bold text-blue-600">ResumePro</div>
+    <nav id="navbar" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-full px-4 py-2 flex justify-between items-center w-11/12 md:w-3/4 z-50 transition-all duration-300" aria-label="Main navigation">
+        <a href="index.html" aria-label="ResumePro Home">
+            <div class="text-xl md:text-2xl font-bold text-blue-600">ResumePro</div>
+        </a>
         
         <!-- Hamburger Menu for Mobile -->
-        <button id="mobileMenuButton" type="button" class="md:hidden p-2 focus:outline-none">
+        <button id="mobileMenuButton" type="button" class="md:hidden p-2 focus:outline-none" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobileMenu">
             <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
             </svg>
         </button>
-
+        
         <!-- Nav Links (Hidden on Mobile, Visible on Desktop) -->
-        <div id="navLinks" class="hidden md:flex justify-center items-center space-x-6">
+        <div class="hidden md:flex justify-center items-center space-x-6">
             <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Home</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">FAQs</a>
+            <a href="#features" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
+            <a href="#how-it-works" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
+            <a href="#faqs" class="nav-link text-gray-700 hover:text-blue-600 transition">FAQs</a>
             <a href="profile.html" class="nav-link bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">Get Started</a>
         </div>
     </nav>
-
+    
     <!-- Mobile Menu (Hidden by Default) -->
-    <div id="mobileMenu" class="md:hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-lg w-11/12 z-50 hidden">
-        <div class="flex flex-col space-y-4 p-6 text-center"> <!-- Centered text -->
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Home</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">FAQs</a>
-            <a href="profile.html" class="nav-link bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">Get Started</a>
+    <div id="mobileMenu" class="md:hidden fixed top-16 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-md shadow-lg rounded-xl w-11/12 z-40 hidden">
+        <div class="flex flex-col space-y-4 p-6 text-center">
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition py-2">Home</a>
+            <a href="#features" class="nav-link text-gray-700 hover:text-blue-600 transition py-2 mobile-nav-link">Features</a>
+            <a href="#how-it-works" class="nav-link text-gray-700 hover:text-blue-600 transition py-2 mobile-nav-link">How It Works</a>
+            <a href="#faqs" class="nav-link text-gray-700 hover:text-blue-600 transition py-2 mobile-nav-link">FAQs</a>
+            <a href="profile.html" class="nav-link bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition mt-2">Get Started</a>
         </div>
     </div>
-
-    <!-- Hero Section -->
-    <section class="hero flex flex-col md:flex-row items-center justify-center text-center md:text-left py-32">
-        <div class="max-w-lg">
-            <h1 class="text-5xl font-extrabold text-gray-800 leading-tight">
-                Build a Resume That Lands You the Job!  
-            </h1>
-            <p class="mt-4 text-lg text-gray-600">
-                Our AI-powered tool ensures your resume gets past ATS filters, giving you the edge to secure your dream job.
-            </p>
-            <button class="mt-6 bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition">
-                Optimize My Resume Now
-            </button>
-        </div>
-    </section>
-
-<!-- Features Section -->
-<section id="features" class="py-16 px-8 bg-white">
-    <h2 class="section-title">Why Choose <span class="text-blue-600">ResumePro?</span></h2>
-    <p class="section-subtitle">AI-powered resume optimization that guarantees ATS approval.</p>
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 text-center">
-        <div class="feature-box">
-            <img src="assets/ai2.svg" alt="AI Optimization" class="feature-icon">
-            <p class="feature-text">AI-driven ATS Optimization</p>
-        </div>
-        <div class="feature-box">
-            <img src="assets/template.svg" alt="Templates" class="feature-icon">
-            <p class="feature-text">Tailored Resume Templates</p>
-        </div>
-        <div class="feature-box">
-            <img src="assets/feedback2.svg" alt="Feedback" class="feature-icon">
-            <p class="feature-text">Instant Feedback & Improvements</p>
-        </div>
-        <div class="feature-box">
-            <img src="assets/industry.svg" alt="Industry Suggestions" class="feature-icon">
-            <p class="feature-text">Industry-Specific Suggestions</p>
-        </div>
-    </div>
-</section>
-
-
-    <!-- How It Works -->
-    <section id="how-it-works" class="py-16 px-8 bg-gray-50">
-        <h2 class="section-title">How It <span class="text-blue-600">Works</span></h2>
-        <div class="grid md:grid-cols-3 gap-6 mt-8">
-            <div class="step-box">
-                <span class="step-number">1</span>
-                <h3>Upload Your Resume</h3>
-                <p>Start fresh or upload your existing resume.</p>
+    
+    <main>
+        <!-- Hero Section -->
+        <header class="hero flex flex-col md:flex-row items-center justify-center text-center md:text-left px-4 py-32 md:px-8">
+            <div class="max-w-lg">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight">
+                    Build an ATS-Optimized Resume That Lands Your Dream Job
+                </h1>
+                <p class="mt-4 text-lg text-gray-600">
+                    Our AI-powered tool ensures your resume gets past ATS filters, giving you the edge to secure interviews. Increase your interview chances by 80% with optimized resumes.
+                </p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <a href="profile.html" class="bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition text-center w-full sm:w-auto">
+                        Create Your ATS Resume
+                    </a>
+                    <a href="#features" class="border border-blue-600 text-blue-600 px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-50 transition text-center w-full sm:w-auto">
+                        Learn How It Works
+                    </a>
+                </div>
             </div>
-            <div class="step-box">
-                <span class="step-number">2</span>
-                <h3>AI Optimization</h3>
-                <p>Our AI scans and improves your resume instantly.</p>
-            </div>
-            <div class="step-box">
-                <span class="step-number">3</span>
-                <h3>Download & Apply</h3>
-                <p>Download your optimized resume and start applying!</p>
-            </div>
-        </div>
-    </section>
-
-<!-- FAQs Section -->
-<section id="faqs" class="py-16 px-8 bg-white">
-    <h2 class="section-title">Frequently Asked <span class="text-blue-600">Questions</span></h2>
-
-    <div class="faq-box mt-8">
-        <h3 class="faq-question">How does AI improve my resume?</h3>
-        <p class="faq-answer hidden">Our AI analyzes job descriptions and optimizes your resume accordingly.</p>
-    </div>
-
-    <div class="faq-box mt-4">
-        <h3 class="faq-question">Will my resume pass ATS filters?</h3>
-        <p class="faq-answer hidden">Yes! Our AI ensures your resume is formatted for ATS approval.</p>
-    </div>
-
-    <div class="faq-box mt-4">
-        <h3 class="faq-question">Is ResumePro free to use?</h3>
-        <p class="faq-answer hidden">Yes! ResumePro is completely free to use with no hidden costs.</p>
-    </div>
-
-    <div class="faq-box mt-4">
-        <h3 class="faq-question">Do I need to create an account?</h3>
-        <p class="faq-answer hidden">No, you can use ResumePro without signing up.</p>
-    </div>
-
-    <div class="faq-box mt-4">
-        <h3 class="faq-question">Can I download my resume?</h3>
-        <p class="faq-answer hidden">Yes, you can download your resume in multiple formats like PDF and DOCX.</p>
-    </div>
-
-    <div class="faq-box mt-4">
-        <h3 class="faq-question">What if I don’t know what to include in my resume?</h3>
-        <p class="faq-answer hidden">Our AI suggests the best content based on your experience and the job role.</p>
-    </div>
-
-    <div class="faq-box mt-4">
-        <h3 class="faq-question">Is my data safe?</h3>
-        <p class="faq-answer hidden">Yes, we do not store or share your data. Your privacy is our priority.</p>
-    </div>
-
-    <div class="faq-box mt-4">
-        <h3 class="faq-question">Can I customize my resume design?</h3>
-        <p class="faq-answer hidden">Yes! ResumePro offers multiple templates and customization options.</p>
-    </div>
-</section>
-
-    <script src="script.js"></script>
-
-    <!-- Footer Section -->
-<footer class="bg-gray-900 text-gray-300 py-12 px-8">
-    <div class="container mx-auto grid md:grid-cols-4 gap-8">
+        </header>
         
-        <!-- Company Info -->
-        <div>
-            <h3 class="footer-title">ResumePro</h3>
-            <p class="footer-text">AI-powered resume optimization to boost your career.</p>
+        <!-- Features Section -->
+        <section id="features" class="py-16 px-4 md:px-8 bg-white">
+            <h2 class="section-title text-3xl md:text-4xl mb-2">Why Choose <span class="text-blue-600">ResumePro</span> for Your ATS Resume?</h2>
+            <p class="section-subtitle text-base md:text-lg mb-8">AI-powered resume optimization that guarantees success with applicant tracking systems.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 text-center">
+                <div class="feature-box">
+                    <img src="assets/svg/ai-svgrepo-com.svg" alt="AI Optimization icon showing brain with gears" class="feature-icon" loading="lazy">
+                    <h3 class="feature-text">AI-driven ATS Optimization</h3>
+                    <p class="text-gray-600 mt-2">Our AI scans job descriptions and tailors your resume to match exactly what hiring managers want to see.</p>
+                </div>
+                <div class="feature-box">
+                    <img src="assets/svg/focus-eye-svgrepo-com.svg" alt="Resume template icon showing document layout" class="feature-icon" loading="lazy">
+                    <h3 class="feature-text">Focus on What Matters Most</h3>
+                    <p class="text-gray-600 mt-2">Clean layouts that naturally draw attention to your achievements, experience, and key strengths.</p>
+                </div>
+                <div class="feature-box">
+                    <img src="assets/svg/letter-mail-open-3-svgrepo-com.svg" alt="Cover Letter icon" class="feature-icon" loading="lazy">
+                    <h3 class="feature-text">Cover Letters, Simplified</h3>
+                    <p class="text-gray-600 mt-2">Craft a matching, professional cover letter with the same ease and polish with just one click.</p>
+                </div>
+                <div class="feature-box">
+                    <img src="assets/svg/industry-windows-svgrepo-com.svg" alt="Industry specific icon showing building with briefcase" class="feature-icon" loading="lazy">
+                    <h3 class="feature-text">Industry-Specific Keywords</h3>
+                    <p class="text-gray-600 mt-2">Optimized for your field with keywords and formats that work best in your industry.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- How It Works -->
+        <section id="how-it-works" class="py-16 px-4 md:px-8 bg-gray-50">
+            <h2 class="section-title text-3xl md:text-4xl mb-6">How Our ATS Resume Builder <span class="text-blue-600">Works</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <div class="step-box">
+                    <span class="step-number">1</span>
+                    <h3 class="mt-4 mb-2">Create Your Professional Profile</h3>
+                    <p>Start with a blank slate, add your professional background details to create a personalized and unique profile.</p>
+                </div>
+                <div class="step-box">
+                    <span class="step-number">2</span>
+                    <h3 class="mt-4 mb-2">AI Resume Optimization</h3>
+                    <p>Our system harnesses AI to intelligently rephrase, refine grammar, and reformat your resume for perfect ATS compatibility.</p>
+                </div>
+                <div class="step-box">
+                    <span class="step-number">3</span>
+                    <h3 class="mt-4 mb-2">Download & Apply With Confidence</h3>
+                    <p>Download your optimized resume and take the next step toward securing more interviews and career opportunities!</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FAQs Section -->
+        <section id="faqs" class="py-16 px-4 md:px-8 bg-white">
+            <h2 class="section-title text-3xl md:text-4xl mb-6">Frequently Asked <span class="text-blue-600">Questions</span></h2>
+            <div class="max-w-3xl mx-auto">
+                <div class="faq-box mt-8" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="faq-question text-lg font-semibold" itemprop="name">How does AI improve my resume for ATS?</h3>
+                    <div class="faq-answer hidden py-2" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p itemprop="text">Our AI takes your professional information, optimizes it for ATS compatibility, and generates a polished PDF resume, ensuring it includes relevant keywords and skills while maintaining clarity and readability. This increases your chances of getting through automated screening systems.</p>
+                    </div>
+                </div>
+                <div class="faq-box mt-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="faq-question text-lg font-semibold" itemprop="name">Will my resume pass ATS filters?</h3>
+                    <div class="faq-answer hidden py-2" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p itemprop="text">Yes! Our AI ensures your resume is formatted correctly for applicant tracking systems and includes the right keywords. Our system analyzes current industry standards to maximize your resume's visibility to recruiters and hiring managers.</p>
+                    </div>
+                </div>
+                <div class="faq-box mt-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="faq-question text-lg font-semibold" itemprop="name">Is ResumePro free to use?</h3>
+                    <div class="faq-answer hidden py-2" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p itemprop="text">Yes! ResumePro is completely free to use with no hidden costs. We believe everyone should have access to tools that help them advance their career and pass ATS screenings.</p>
+                    </div>
+                </div>
+                <div class="faq-box mt-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="faq-question text-lg font-semibold" itemprop="name">Do I need to create an account?</h3>
+                    <div class="faq-answer hidden py-2" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p itemprop="text">No account creation required. You can start using ResumePro instantly, with no account needed. Simply input your information and get an ATS-optimized resume right away.</p>
+                    </div>
+                </div>
+                <div class="faq-box mt-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="faq-question text-lg font-semibold" itemprop="name">Can I download my ATS-optimized resume?</h3>
+                    <div class="faq-answer hidden py-2" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p itemprop="text">Absolutely! Download your optimized resume and tailored cover letter as PDFs, ready to submit to any job application portal or ATS system.</p>
+                    </div>
+                </div>
+                <div class="faq-box mt-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="faq-question text-lg font-semibold" itemprop="name">What if I don't know what to include in my resume?</h3>
+                    <div class="faq-answer hidden py-2" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p itemprop="text">Don't worry! Simply fill out the form with your basic information, and our AI will help structure and enhance your experience and skills to create an impressive ATS-friendly resume.</p>
+                    </div>
+                </div>
+                <div class="faq-box mt-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="faq-question text-lg font-semibold" itemprop="name">Is my resume data safe?</h3>
+                    <div class="faq-answer hidden py-2" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p itemprop="text">Absolutely. We never share your information with third parties. Your resume data is only used to help you create the perfect ATS-compatible resume.</p>
+                    </div>
+                </div>
+                <div class="faq-box mt-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="faq-question text-lg font-semibold" itemprop="name">Can I customize my ATS resume design?</h3>
+                    <div class="faq-answer hidden py-2" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p itemprop="text">Yes! Choose from a selection of proven, predefined templates that have delivered great results with ATS systems. Based on demand, we can add custom templates in the future.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ResumePro - ATS Resume Builder",
+      "url": "https://www.resumepro.com",
+      "description": "AI-powered resume optimization tool that helps create ATS-friendly resumes",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "ResumePro",
+        "url": "https://www.resumepro.com"
+      }
+    }
+    </script>
+    
+    <!-- Additional structured data for Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ResumePro",
+      "url": "https://www.resumepro.com",
+      "logo": "https://www.resumepro.com/assets/logo.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "support@resumepro.com",
+        "contactType": "customer support"
+      }
+    }
+    </script>
+    
+    <!-- FAQ Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does AI improve my resume for ATS?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our AI takes your professional information, optimizes it for ATS compatibility, and generates a polished PDF resume, ensuring it includes relevant keywords and skills while maintaining clarity and readability."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Will my resume pass ATS filters?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Our AI ensures your resume is formatted correctly for applicant tracking systems and includes the right keywords."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is ResumePro free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! ResumePro is completely free to use with no hidden costs. We believe everyone should have access to tools that help them advance their career."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to create an account?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No account creation required. You can start using ResumePro instantly, with no account needed."
+          }
+        }
+      ]
+    }
+    </script>
+    
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-gray-300 py-12 px-4 md:px-8">
+        <div class="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            
+            <!-- Company Info -->
+            <div>
+                <h3 class="footer-title">ResumePro</h3>
+                <p class="footer-text">AI-powered resume optimization to boost your career and pass ATS screening.</p>
+            </div>
+            <!-- Quick Links -->
+            <div>
+                <h3 class="footer-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#features" class="footer-nav-link">ATS Resume Features</a></li>
+                    <li><a href="#how-it-works" class="footer-nav-link">How Our Builder Works</a></li>
+                    <li><a href="#faqs" class="footer-nav-link">Resume FAQs</a></li>
+                </ul>
+            </div>
+            <!-- Legal & Policies -->
+            <div>
+                <h3 class="footer-title">Legal & Policies</h3>
+                <ul class="footer-links">
+                    <li><a href="legal.html#about">About ResumePro</a></li>
+                    <li><a href="legal.html#privacy">Privacy Policy</a></li>
+                    <li><a href="legal.html#terms">Terms of Service</a></li>
+                    <li><a href="legal.html">Partner With Us</a></li>
+                </ul>
+            </div>
+            <!-- Contact Info -->
+            <div>
+                <h3 class="footer-title">Contact Us</h3>
+                <ul class="footer-links">
+                    <li>Email: <a href="mailto:support@resumepro.com">support@resumepro.com</a></li>
+                    <li><address>123 Resume Way, Career City, 45678</address></li>
+                </ul>
+            </div>
         </div>
-
-        <!-- Quick Links -->
-        <div>
-            <h3 class="footer-title">Quick Links</h3>
-            <ul class="footer-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#faqs">FAQs</a></li>
-            </ul>
+        <div class="text-center text-gray-500 text-sm mt-8">
+            &copy; 2025 ResumePro. All rights reserved. | <a href="sitemap.xml">Sitemap</a>
         </div>
-
-        <!-- Legal & Policies -->
-        <div>
-            <h3 class="footer-title">Legal & Policies</h3>
-            <ul class="footer-links">
-                <li><a href="legal.html#about">About Us</a></li>
-                <li><a href="legal.html#privacy">Privacy Policy</a></li>
-                <li><a href="legal.html#terms">Terms of Service</a></li>
-                <li><a href="legal.html">Advertise With Us</a></li>
-            </ul>
-        </div>
-
-        <!-- Contact Info -->
-        <div>
-            <h3 class="footer-title">Contact Us</h3>
-            <ul class="footer-links">
-                <li>Email: <a href="mailto:support@resumepro.com">support@resumepro.com</a></li>
-                <li>Phone: +1 234 567 890</li>
-            </ul>
-        </div>
-
-    </div>
-
-    <div class="text-center text-gray-500 text-sm mt-8">
-        &copy; 2025 ResumePro. All rights reserved.
-    </div>
-</footer>
+    </footer>
+    
+    <script src="script.js" defer></script>
 </body>
 </html>
