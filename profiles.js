@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Get all DOM elements
     const resumeForm = document.getElementById("resumeForm");
     const studentSection = document.getElementById("studentSection");
     const professionalSection = document.getElementById("professionalSection");
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mobileMenu = document.getElementById("mobileMenu");
     const generateCoverLetterCheckbox = document.getElementById('generateCoverLetter');
     const agreeTermsCheckbox = document.getElementById('agreeTerms');
+    const internshipFields = document.getElementById("internshipFields");
 
     // Mobile menu toggle
     mobileMenuButton.addEventListener("click", (e) => {
@@ -30,6 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Initialize visibility based on profile type
+    function toggleRequiredAttributes(section, isRequired) {
+        const fields = section.querySelectorAll("input, textarea, select");
+        fields.forEach(field => {
+            if (isRequired) {
+                field.setAttribute("required", true);
+            } else {
+                field.removeAttribute("required");
+            }
+        });
+    }
+
     toggleRequiredAttributes(studentSection, initialProfileType === "student");
     toggleRequiredAttributes(professionalSection, initialProfileType === "professional");
     professionalSection.classList.toggle("hidden", initialProfileType !== "professional");
@@ -37,20 +50,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Cover Letter Popup
     generateCoverLetterCheckbox.addEventListener('change', function() {
         if (this.checked) {
-            showCoverLetterPopup();
+            const popup = document.createElement('div');
+            popup.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-lg shadow-lg text-sm';
+            popup.textContent = 'Cover letter will be generated with your resume.';
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                popup.remove();
+            }, 3000);
         }
     });
-
-    function showCoverLetterPopup() {
-        const popup = document.createElement('div');
-        popup.className = 'cover-letter-popup';
-        popup.textContent = 'Cover letter will be generated with your resume.';
-        document.body.appendChild(popup);
-        
-        setTimeout(() => {
-            popup.remove();
-        }, 5000);
-    }
 
     // Toggle between student and professional profiles
     document.querySelectorAll('.profileType').forEach(radio => {
@@ -64,18 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
             toggleRequiredAttributes(professionalSection, !isStudent);
         });
     });
-
-    // Function to toggle required attributes
-    function toggleRequiredAttributes(section, isRequired) {
-        const fields = section.querySelectorAll("input, textarea, select");
-        fields.forEach(field => {
-            if (isRequired) {
-                field.setAttribute("required", true);
-            } else {
-                field.removeAttribute("required");
-            }
-        });
-    }
 
     // Toggle Internship Section Visibility
     document.querySelectorAll('.internshipToggle').forEach(radio => {
@@ -312,21 +309,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Form Submission
-    resumeForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
+// Form Submission
+resumeForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-        // Check if terms are agreed to
-        if (!agreeTermsCheckbox.checked) {
-            alert('You must agree to the Terms of Use and Privacy Policy to continue.');
-            return;
-        }
+    if (!agreeTermsCheckbox.checked) {
+        alert('You must agree to the Terms of Use and Privacy Policy to continue.');
+        return;
+    }
 
-        // Collect form data and construct finalData object
+    // Show loading state
+    const submitButton = resumeForm.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<span class="inline-flex items-center"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Processing...</span>';
+
+    try {
+        // Collect form data
         const formData = new FormData(resumeForm);
         const formDataObj = {};
 
-        // Convert FormData to object
+        // Convert FormData to object with proper array handling
         for (let [key, value] of formData.entries()) {
             if (key.endsWith('[]')) {
                 const cleanKey = key.slice(0, -2);
@@ -339,7 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Construct final JSON object
+        // Prepare final data object with separate technologies arrays
         const finalData = {
             name: formDataObj.name,
             email: formDataObj.email,
@@ -361,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
             publications: [],
         };
 
-        // Group education
+        // Process education data
         if (formDataObj.institution) {
             for (let i = 0; i < formDataObj.institution.length; i++) {
                 finalData.education.push({
@@ -373,43 +376,49 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Group projects
-        if (formDataObj.profileType === "student" && formDataObj.projectTitle) {
+        // Process projects with project-specific technologies
+        if (formDataObj.projectTitle) {
+            const projectTechFields = document.querySelectorAll('.project-entry input[name="technologies[]"]');
             for (let i = 0; i < formDataObj.projectTitle.length; i++) {
                 finalData.projects.push({
                     projectTitle: formDataObj.projectTitle[i],
                     projectRole: formDataObj.projectRole[i],
                     projectDuration: formDataObj.projectDuration[i],
+                    technologiesUsed: projectTechFields[i] ? projectTechFields[i].value : '',
                     contribution: formDataObj.contribution[i],
                 });
             }
         }
 
-        // Group internships
+        // Process internships with internship-specific technologies
         if (formDataObj.profileType === "student" && formDataObj.internship === "yes" && formDataObj.internship_organization) {
+            const internshipTechFields = document.querySelectorAll('.internship-entry input[name="technologies[]"]');
             for (let i = 0; i < formDataObj.internship_organization.length; i++) {
                 finalData.internships.push({
                     organization: formDataObj.internship_organization[i],
                     role: formDataObj.internship_role[i],
                     duration: formDataObj.internship_duration[i],
+                    technologiesUsed: internshipTechFields[i] ? internshipTechFields[i].value : '',
                     contribution: formDataObj.internship_contribution[i],
                 });
             }
         }
 
-        // Group work experience
-        if (formDataObj.profileType === "professional" && formDataObj.company) {
+        // Process work experience with experience-specific technologies
+        if (formDataObj.company) {
+            const experienceTechFields = document.querySelectorAll('.experience-entry input[name="technologies[]"]');
             for (let i = 0; i < formDataObj.company.length; i++) {
                 finalData.experience.push({
                     company: formDataObj.company[i],
                     jobTitle: formDataObj.jobTitle[i],
                     workDuration: formDataObj.workDuration[i],
+                    technologiesUsed: experienceTechFields[i] ? experienceTechFields[i].value : '',
                     responsibilities: formDataObj.responsibilities[i],
                 });
             }
         }
 
-        // Group achievements
+        // Process achievements
         if (formDataObj.achievementTitle) {
             for (let i = 0; i < formDataObj.achievementTitle.length; i++) {
                 finalData.achievements.push({
@@ -420,7 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Group certifications
+        // Process certifications
         if (formDataObj.certificationTitle) {
             for (let i = 0; i < formDataObj.certificationTitle.length; i++) {
                 finalData.certifications.push({
@@ -433,7 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Group publications
+        // Process publications
         if (formDataObj.publicationTitle) {
             for (let i = 0; i < formDataObj.publicationTitle.length; i++) {
                 finalData.publications.push({
@@ -444,36 +453,371 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        try {
-            // Send data to your endpoint
-            const response = await fetch('http://192.168.1.10:8002/getData', {
+        // Collection of PDFs to display
+        const pdfs = {};
+
+        // 1. ALWAYS send to getData endpoint
+        const getDataPromise = fetch('http://192.168.1.8:8501/getData', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(finalData)
+        });
+
+        // 2. Set up resume generation
+        const resumePromise = fetch('http://192.168.1.5:8502/generate/generate_resume', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(finalData)
+        });
+
+        // 3. Set up cover letter generation if requested
+        let coverLetterPromise = null;
+        if (finalData.generateCoverLetter) {
+            coverLetterPromise = fetch('http://192.168.1.5:8502/generate/generate_cover_letter', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(finalData)
             });
+        }
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+        // Wait for getData to complete
+        const getDataResponse = await getDataPromise;
+        if (!getDataResponse.ok) {
+            throw new Error(`Failed to send data to getData endpoint: ${getDataResponse.status}`);
+        }
+
+        // Wait for all PDF generation requests to complete simultaneously
+        const responses = await Promise.all([
+            resumePromise,
+            ...(coverLetterPromise ? [coverLetterPromise] : [])
+        ]);
+
+        // Check if any request failed
+        const failedResponse = responses.find(response => !response.ok);
+        if (failedResponse) {
+            throw new Error(`PDF generation failed with status: ${failedResponse.status}`);
+        }
+
+        // Process resume response
+        const resumePdfBlob = await responses[0].blob();
+        const resumePdfUrl = URL.createObjectURL(resumePdfBlob);
+        pdfs.resume = {
+            url: resumePdfUrl,
+            name: `${finalData.name || 'User'}-resume.pdf`
+        };
+
+        // Process cover letter response if it exists
+        if (coverLetterPromise) {
+            const coverLetterPdfBlob = await responses[1].blob();
+            const coverLetterPdfUrl = URL.createObjectURL(coverLetterPdfBlob);
+            pdfs.coverLetter = {
+                url: coverLetterPdfUrl,
+                name: `${finalData.name || 'User'}-cover-letter.pdf`
+            };
+        }
+
+        // Show PDFs in preview modal
+        showPdfPreviewModal(pdfs, finalData.name || 'User');
+        
+        // Save JSON data for reference
+        downloadObjectAsJson(finalData, "resume-data");
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert(`Error: ${error.message}`);
+    } finally {
+        // Restore button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+    }
+});
+
+// PDF Preview Modal Function for multiple PDFs
+function showPdfPreviewModal(pdfs, userName) {
+    // Create modal container
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+    
+    // Create tabs for each PDF
+    let tabsHtml = '';
+    let contentHtml = '';
+    let activeSet = false;
+    
+    // Generate tabs and content for each PDF
+    Object.entries(pdfs).forEach(([type, pdf], index) => {
+        const isActive = !activeSet;
+        if (isActive) activeSet = true;
+        
+        const typeFormatted = type === 'resume' ? 'Resume' : 'Cover Letter';
+        
+        tabsHtml += `
+            <button class="pdf-tab ${isActive ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'} px-4 py-2 rounded-t-lg hover:bg-blue-500 hover:text-white transition" 
+                    data-tab="${type}">
+                ${typeFormatted}
+            </button>
+        `;
+        
+        contentHtml += `
+            <div id="tab-content-${type}" class="tab-content ${isActive ? 'block' : 'hidden'} w-full h-full">
+                <iframe src="${pdf.url}" class="w-full h-full min-h-[70vh]" frameborder="0"></iframe>
+            </div>
+        `;
+    });
+    
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-screen overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center border-b p-4">
+                <h3 class="text-xl font-bold">Generated Documents for ${userName}</h3>
+                <button id="closePdfPreview" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="border-b flex space-x-1 px-4 pt-2">
+                ${tabsHtml}
+            </div>
+            
+            <div class="flex-grow overflow-auto">
+                ${contentHtml}
+            </div>
+            
+            <div class="border-t p-4 flex justify-between">
+                <button id="regeneratePdfs" class="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
+                    Regenerate Documents
+                </button>
+                <div class="space-x-2">
+                    ${Object.entries(pdfs).map(([type, pdf]) => `
+                        <a href="${pdf.url}" download="${pdf.name}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+                            Download ${type === 'resume' ? 'Resume' : 'Cover Letter'}
+                        </a>
+                    `).join('')}
+                    <button id="closeAndContinue" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    
+    // Set up tab switching
+    modal.querySelectorAll('.pdf-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Update tab styles
+            modal.querySelectorAll('.pdf-tab').forEach(t => {
+                t.classList.remove('bg-blue-600', 'text-white');
+                t.classList.add('bg-gray-100', 'text-gray-700');
+            });
+            tab.classList.remove('bg-gray-100', 'text-gray-700');
+            tab.classList.add('bg-blue-600', 'text-white');
+            
+            // Update content visibility
+            const tabType = tab.getAttribute('data-tab');
+            modal.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            modal.querySelector(`#tab-content-${tabType}`).classList.remove('hidden');
+        });
+    });
+    
+    // Event listeners for modal
+    modal.querySelector('#closePdfPreview').addEventListener('click', () => {
+        document.body.removeChild(modal);
+        document.body.style.overflow = '';
+        // Clean up memory
+        Object.values(pdfs).forEach(pdf => URL.revokeObjectURL(pdf.url));
+    });
+    
+    modal.querySelector('#closeAndContinue').addEventListener('click', () => {
+        document.body.removeChild(modal);
+        document.body.style.overflow = '';
+        // Clean up memory
+        Object.values(pdfs).forEach(pdf => URL.revokeObjectURL(pdf.url));
+    });
+    
+    modal.querySelector('#regeneratePdfs').addEventListener('click', async () => {
+        const regenerateBtn = modal.querySelector('#regeneratePdfs');
+        const originalText = regenerateBtn.textContent;
+        regenerateBtn.disabled = true;
+        regenerateBtn.innerHTML = '<span class="inline-flex items-center"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Regenerating...</span>';
+        
+        try {
+            // Get fresh form data
+            const formData = new FormData(resumeForm);
+            const formDataObj = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (key.endsWith('[]')) {
+                    const cleanKey = key.slice(0, -2);
+                    if (!formDataObj[cleanKey]) {
+                        formDataObj[cleanKey] = [];
+                    }
+                    formDataObj[cleanKey].push(value);
+                } else {
+                    formDataObj[key] = value;
+                }
             }
-
-            const result = await response.json();
-            console.log('Success:', result);
             
-            // Optionally download the JSON file after successful submission
-            downloadObjectAsJson(finalData, "resume-data");
+            // Prepare data for regeneration
+            const regenerationData = {
+                ...formDataObj,
+                generateCoverLetter: formDataObj.generateCoverLetter === "on",
+                agreedToTerms: true
+            };
             
-            // Show success message to user
-            alert('Resume data successfully submitted!');
+            // Collection of new PDFs
+            const newPdfs = {};
+            
+            // Send to getData endpoint again
+            const getDataPromise = fetch('http://192.168.1.8:8501/getData', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(regenerationData)
+            });
+            
+            // Set up resume regeneration
+            const resumePromise = fetch('http://192.168.1.5:8502/generate/generate_resume', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(regenerationData)
+            });
+            
+            // Set up cover letter regeneration if requested
+            let coverLetterPromise = null;
+            if (regenerationData.generateCoverLetter) {
+                coverLetterPromise = fetch('http://192.168.1.5:8502/generate/generate_cover_letter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(regenerationData)
+                });
+            }
+            
+            // Wait for getData to complete
+            const getDataResponse = await getDataPromise;
+            if (!getDataResponse.ok) {
+                throw new Error(`Failed to send data to getData endpoint: ${getDataResponse.status}`);
+            }
+            
+            // Wait for all PDF generation requests to complete simultaneously
+            const responses = await Promise.all([
+                resumePromise,
+                ...(coverLetterPromise ? [coverLetterPromise] : [])
+            ]);
+            
+            // Check if any request failed
+            const failedResponse = responses.find(response => !response.ok);
+            if (failedResponse) {
+                throw new Error(`PDF regeneration failed with status: ${failedResponse.status}`);
+            }
+            
+            // Process resume response
+            const newResumePdfBlob = await responses[0].blob();
+            const newResumePdfUrl = URL.createObjectURL(newResumePdfBlob);
+            newPdfs.resume = {
+                url: newResumePdfUrl,
+                name: `${formDataObj.name || 'User'}-resume-regenerated.pdf`
+            };
+            
+            // Process cover letter response if it exists
+            if (coverLetterPromise) {
+                const newCoverLetterPdfBlob = await responses[1].blob();
+                const newCoverLetterPdfUrl = URL.createObjectURL(newCoverLetterPdfBlob);
+                newPdfs.coverLetter = {
+                    url: newCoverLetterPdfUrl,
+                    name: `${formDataObj.name || 'User'}-cover-letter-regenerated.pdf`
+                };
+            }
+            
+            // Update PDFs in the modal
+            Object.entries(newPdfs).forEach(([type, pdf]) => {
+                const iframe = modal.querySelector(`#tab-content-${type} iframe`);
+                if (iframe) {
+                    iframe.src = pdf.url;
+                    
+                    // Update download link
+                    modal.querySelectorAll(`a[download*="${type === 'resume' ? 'resume' : 'cover-letter'}"]`).forEach(link => {
+                        link.href = pdf.url;
+                        link.setAttribute('download', pdf.name);
+                    });
+                } else if (type === 'coverLetter') {
+                    // If cover letter wasn't there before but is now, need to add a new tab and content
+                    const tabsContainer = modal.querySelector('.border-b.flex');
+                    const contentContainer = modal.querySelector('.flex-grow.overflow-auto');
+                    const downloadContainer = modal.querySelector('.border-t.p-4.flex.justify-between .space-x-2');
+                    
+                    // Add new tab
+                    const newTab = document.createElement('button');
+                    newTab.className = 'pdf-tab bg-gray-100 text-gray-700 px-4 py-2 rounded-t-lg hover:bg-blue-500 hover:text-white transition';
+                    newTab.setAttribute('data-tab', 'coverLetter');
+                    newTab.textContent = 'Cover Letter';
+                    tabsContainer.appendChild(newTab);
+                    
+                    // Add new content
+                    const newContent = document.createElement('div');
+                    newContent.id = 'tab-content-coverLetter';
+                    newContent.className = 'tab-content hidden w-full h-full';
+                    newContent.innerHTML = `<iframe src="${pdf.url}" class="w-full h-full min-h-[70vh]" frameborder="0"></iframe>`;
+                    contentContainer.appendChild(newContent);
+                    
+                    // Add download link
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = pdf.url;
+                    downloadLink.setAttribute('download', pdf.name);
+                    downloadLink.className = 'px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition';
+                    downloadLink.textContent = 'Download Cover Letter';
+                    downloadContainer.insertBefore(downloadLink, downloadContainer.lastElementChild);
+                    
+                    // Add tab switching functionality
+                    newTab.addEventListener('click', () => {
+                        modal.querySelectorAll('.pdf-tab').forEach(t => {
+                            t.classList.remove('bg-blue-600', 'text-white');
+                            t.classList.add('bg-gray-100', 'text-gray-700');
+                        });
+                        newTab.classList.remove('bg-gray-100', 'text-gray-700');
+                        newTab.classList.add('bg-blue-600', 'text-white');
+                        
+                        modal.querySelectorAll('.tab-content').forEach(content => {
+                            content.classList.add('hidden');
+                        });
+                        newContent.classList.remove('hidden');
+                    });
+                }
+            });
+            
+            // Clean up old URLs
+            Object.values(pdfs).forEach(pdf => URL.revokeObjectURL(pdf.url));
+            
+            // Update the pdfs object with new URLs
+            Object.keys(pdfs).forEach(key => {
+                if (newPdfs[key]) {
+                    pdfs[key] = newPdfs[key];
+                }
+            });
+            
+            // Add any new pdfs that weren't there before
+            Object.keys(newPdfs).forEach(key => {
+                if (!pdfs[key]) {
+                    pdfs[key] = newPdfs[key];
+                }
+            });
+            
+            alert('Documents successfully regenerated!');
             
         } catch (error) {
-            console.error('Error:', error);
-            alert('There was an error submitting your data. Please try again.');
+            console.error('Regeneration error:', error);
+            alert('Failed to regenerate documents. Please try again.');
+        } finally {
+            regenerateBtn.disabled = false;
+            regenerateBtn.textContent = originalText;
         }
     });
+}
 
-    // Helper function to download data as a JSON file
+    // Helper function to download data as JSON
     function downloadObjectAsJson(exportObj, exportName) {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
         const downloadAnchorNode = document.createElement('a');
