@@ -1,156 +1,114 @@
-/* General Reset */
+/* General Reset and Base Styles */
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    overflow-x: hidden; /* Prevents horizontal scroll issues */
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.5;
 }
 
-/* Main Content */
 main {
-    flex: 1; /* Pushes the footer down */
-    padding-bottom: 5vh; /* Responsive spacing */
+    flex: 1;
+    padding-bottom: 5vh;
 }
 
-/* Navbar Floating Effect */
+/* Improved Navbar Floating Effect */
 #navbar {
     transition: all 0.3s ease-in-out;
+    z-index: 100;
+    width: 95%;
+    max-width: 1200px;
 }
 
 #navbar.scrolled {
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Fix: Centered Navbar */
-.floating-navbar {
-    position: fixed;
-    top: 10px;;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(31, 41, 55, 0.9);
-    padding: 12px 24px;
-    border-radius: 12px;
-    z-index: 1000;
+/* Mobile Dropdown Menu */
+#mobile-menu {
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
 }
 
-/* Logo */
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    margin-right: auto;
+#mobile-menu.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
 }
 
-/* Navbar Links */
-.nav-links {
-    list-style: none;
+#mobile-menu a {
+    position: relative;
+}
+
+
+
+#mobile-menu a:last-child:after {
+    display: none;
+}
+
+
+/* Form Elements Enhancement */
+input, textarea, select {
+    width: 100%;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Button Styles */
+button {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Tooltip Enhancements */
+.group:hover .hidden {
+    display: block;
+}
+
+/* Add Entry Card Styles */
+.education-entry, .project-entry, .internship-entry, .experience-entry {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.education-entry:hover, .project-entry:hover, .internship-entry:hover, .experience-entry:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Hero Section */
+.hero {
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    padding: 5vh 5vw;
+    min-height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
 }
 
-.nav-links a {
-    text-decoration: none;
-    color: #fff;
-    font-weight: 500;
-}
-
-#mobileMenu {
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
-.btn {
-    padding: 10px 20px;
-    background: #2563eb;
-    color: white;
-    border-radius: 20px;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-/* Hero Section */
-.hero {
-    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-    width: 100%;
-    min-height: 250px;
-    text-align: center;
-    padding: 40px 20px;
-}
-
-.hero h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-.hero p {
-    font-size: 16px;
-    max-width: 80%;
-    margin: 0 auto;
-}
-
-/* Resume Form */
-.form {
-    background: white;
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 30px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
-}
-
-.form h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-label {
-    display: block;
-    font-weight: bold;
-    margin: 10px 0 5px;
-}
-
-
-.input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-/* Submit Button */
-.form-actions {
-    text-align: center;
-    margin-top: 20px;
-}
-
-button.btn {
-    width: 100%;
-    padding: 12px;
-    font-size: 18px;
-    background: #2563eb;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s ease-in-out;
-}
-
-button.btn:hover {
-    background: #1e40af;
-}
-
-/* Footer */
+/* Better Footer Styling */
 footer {
     background: #1f2937;
     color: #d1d5db;
     padding: 30px 20px;
-    text-align: center;
     width: 100%;
-    margin-top: 20px;
 }
 
 .footer-title {
@@ -160,12 +118,6 @@ footer {
     margin-bottom: 12px;
 }
 
-.footer-text {
-    font-size: 1rem;
-    color: #d1d5db;
-}
-
-/* Footer Links */
 .footer-links {
     list-style: none;
     padding: 0;
@@ -173,85 +125,109 @@ footer {
 }
 
 .footer-links li {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .footer-links a {
     text-decoration: none;
     color: #9ca3af;
-    transition: color 0.3s ease-in-out;
+    transition: color 0.3s ease;
 }
 
 .footer-links a:hover {
     color: #f9fafb;
 }
 
-/* Social Icons */
-.social-icon img {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-    display: inline-block;
-    transition: transform 0.3s ease-in-out;
+/* Enhanced Responsive Breakpoints */
+/* Large Screens */
+@media (min-width: 1280px) {
+    .container {
+        max-width: 1200px;
+    }
 }
-
-.social-icon img:hover {
-    transform: scale(1.1);
-}
-
-/* Responsive Styles */
 
 /* Tablets */
 @media (max-width: 1024px) {
     .hero {
-        padding: 50px 20px;
+        padding: 4vh 4vw;
+    }
+    
+    .hero h1 {
+        font-size: calc(1.8rem + 1vw);
     }
 }
 
-/* Navbar on Mobile */
+/* Small Tablets */
 @media (max-width: 768px) {
     #navbar {
+        width: 90%;
+        padding: 10px 15px;
+    }
+    
+    .hero h1 {
+        font-size: calc(1.5rem + 1vw);
+    }
+    
+    form {
+        padding: 20px !important;
+    }
+}
+
+/* Mobile Phones */
+@media (max-width: 640px) {
+    #navbar {
         width: 95%;
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        padding: 8px 12px;
+    }
+    
+    .hero {
+        padding: 3vh 4vw;
+    }
+    
+    .hero h1 {
+        font-size: calc(1.3rem + 1vw);
+    }
+    
+    form {
+        padding: 15px !important;
+    }
+    
+    input, textarea, select {
+        padding: 10px !important;
+    }
+    
+    button {
+        padding: 10px !important;
+    }
+    
+    footer {
         text-align: center;
     }
-
-    .nav-links {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .btn {
-        font-size: 14px;
-        padding: 8px 16px;
+    
+    .footer-links {
+        margin-bottom: 20px;
     }
 }
 
-/* Hero Section */
-@media (max-width: 768px) {
-    .hero h2 {
-        font-size: 24px;
-    }
-
-    .hero p {
-        font-size: 14px;
-    }
-}
-
-/* Resume Form */
-@media (max-width: 768px) {
-    .form {
-        width: 90%;
-        padding: 20px;
-    }
-}
-
-/* Footer */
+/* Small Mobile Phones */
 @media (max-width: 480px) {
-    footer {
-        padding: 15px;
+    #navbar {
+        padding: 6px 10px;
+    }
+    
+    .hero h1 {
+        font-size: calc(1.2rem + 1vw);
+    }
+    
+    form {
+        padding: 12px !important;
+    }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
     }
 }

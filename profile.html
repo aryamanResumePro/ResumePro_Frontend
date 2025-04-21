@@ -3,44 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumePro | Create Resume</title>
+    <meta name="description" content="ResumePro - Create professional, ATS-friendly resumes in minutes with our easy-to-use resume generator.">
+    <meta name="keywords" content="resume builder, resume generator, professional resume, ATS-friendly resume, job application">
+    <meta name="author" content="ResumePro">
+    <meta name="robots" content="index, follow">
+    <!-- Open Graph Meta Tags for better social media sharing -->
+    <meta property="og:title" content="ResumePro | Create Professional Resumes">
+    <meta property="og:description" content="Create professional, ATS-friendly resumes in minutes with our easy-to-use resume generator.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.resumepro.com/create-resume">
+    <meta property="og:image" content="https://www.resumepro.com/images/resumepro-social.jpg">
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ResumePro | Create Professional Resumes">
+    <meta name="twitter:description" content="Create professional, ATS-friendly resumes in minutes with our easy-to-use resume generator.">
+    <meta name="twitter:image" content="https://www.resumepro.com/images/resumepro-social.jpg">
+    
+    <title>ResumePro | Create Your Professional Resume</title>
+    <link rel="canonical" href="https://www.resumepro.com/create-resume">
+    <link rel="stylesheet" href="profiles.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Preconnect to improve performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Font (optional) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Structured data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ResumePro",
+      "applicationCategory": "Resume Builder",
+      "description": "Create professional, ATS-friendly resumes in minutes with our easy-to-use resume generator.",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 font-sans text-gray-800">
     <!-- Floating Navbar -->
     <nav id="navbar" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-full px-4 py-2 flex justify-between items-center w-11/12 md:w-3/4 z-50 transition-all duration-300">
-        <div class="text-xl md:text-2xl font-bold text-blue-600">ResumePro</div>
-        
+        <a href="index.html" aria-label="ResumePro Home" class="text-xl md:text-2xl font-bold text-blue-600">ResumePro</a>
         <!-- Hamburger Menu for Mobile -->
-        <button id="mobileMenuButton" type="button" class="md:hidden p-2 focus:outline-none">
+        <button id="mobileMenuButton" type="button" class="md:hidden p-2 focus:outline-none" aria-label="Toggle menu" aria-expanded="false">
             <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
             </svg>
         </button>
-
         <!-- Nav Links (Hidden on Mobile, Visible on Desktop) -->
         <div id="navLinks" class="hidden md:flex justify-center items-center space-x-6">
             <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Home</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">FAQs</a>
+            <a href="index.html#features" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
+            <a href="index.html#how-it-works" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
+            <a href="index.html#faqs" class="nav-link text-gray-700 hover:text-blue-600 transition">FAQs</a>
             <a href="profile.html" class="nav-link bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">Get Started</a>
         </div>
     </nav>
-
     <!-- Mobile Menu (Hidden by Default) -->
-    <div id="mobileMenu" class="md:hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-lg rounded-lg w-11/12 z-50 hidden">
-        <div class="flex flex-col space-y-4 p-6 text-center"> <!-- Centered text -->
+    <div id="mobileMenu" class="md:hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-md shadow-lg rounded-lg w-11/12 z-50 hidden">
+        <div class="flex flex-col space-y-4 p-6 text-center">
             <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Home</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
-            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 transition">FAQs</a>
+            <a href="index.html#features" class="nav-link text-gray-700 hover:text-blue-600 transition">Features</a>
+            <a href="index.html#how-it-works" class="nav-link text-gray-700 hover:text-blue-600 transition">How It Works</a>
+            <a href="index.html#faqs" class="nav-link text-gray-700 hover:text-blue-600 transition">FAQs</a>
             <a href="profile.html" class="nav-link bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">Get Started</a>
         </div>
     </div>
-
     <!-- Hero Section -->
-    <section class="hero legal-hero flex flex-col items-center justify-center text-center py-12 md:py-20 mt-16">
+    <section class="hero flex flex-col items-center justify-center text-center py-12 md:py-20 mt-16">
         <div class="max-w-3xl w-full px-4 space-y-6">
             <h1 class="text-3xl md:text-5xl font-extrabold text-gray-800 leading-tight">
                 Build Your Perfect <span class="text-blue-600 inline">Resume</span>
