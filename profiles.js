@@ -24,6 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const generateCoverLetterCheckbox = document.getElementById('generateCoverLetter');
     const agreeTermsCheckbox = document.getElementById('agreeTerms');
     const internshipFields = document.getElementById("internshipFields");
+    const professionalProjectsSection = document.getElementById("professionalProjectsSection");
+    const professionalProjectFields = document.getElementById("professionalProjectFields");
+    const addProfessionalProjectBtn = document.getElementById("addProfessionalProjectBtn");
+    const getAdditionalSkills = document.getElementById("additionalSkills");
 
 
     // Mobile menu toggle
@@ -111,9 +115,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Projects section is now always visible, so we don't need to toggle it
     toggleRequiredAttributes(studentSection, initialProfileType === "student");
     toggleRequiredAttributes(professionalSection, initialProfileType === "professional");
     professionalSection.classList.toggle("hidden", initialProfileType !== "professional");
+    professionalProjectsSection.classList.toggle("hidden", initialProfileType !== "professional");
 
     // Cover Letter Popup
     generateCoverLetterCheckbox.addEventListener('change', function() {
@@ -135,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const isStudent = this.value === "student";
             studentSection.classList.toggle("hidden", !isStudent);
             professionalSection.classList.toggle("hidden", isStudent);
+            professionalProjectsSection.classList.toggle("hidden", isStudent);
             internshipStatus.classList.toggle("hidden", !isStudent);
             internshipSection.classList.add("hidden");
             toggleRequiredAttributes(studentSection, isStudent);
@@ -200,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="space-y-2">
                     <label class="block font-medium text-gray-700">Technologies Used</label>
-                    <input type="text" name="technologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS" required>
+                    <input type="text" name="projectTechnologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS" required>
                 </div>
                 <div class="md:col-span-2 space-y-2">
                     <label class="block font-medium text-gray-700">Contribution</label>
@@ -232,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="space-y-2">
                     <label class="block font-medium text-gray-700">Technologies Used</label>
-                    <input type="text" name="technologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS" required>
+                    <input type="text" name="experienceTechnologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS" required>
                 </div>
                 <div class="md:col-span-2 space-y-2">
                     <label class="block font-medium text-gray-700">Responsibilities</label>
@@ -264,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="space-y-2">
                     <label class="block font-medium text-gray-700">Technologies Used</label>
-                    <input type="text" name="technologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS">
+                    <input type="text" name="internship_technologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS">
                 </div>
                 <div class="md:col-span-2 space-y-2">
                     <label class="block font-medium text-gray-700">Contribution</label>
@@ -275,6 +282,38 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         internshipFields.appendChild(newEntry);
     }
+
+    // Add Professional Project Entry
+    addProfessionalProjectBtn.addEventListener("click", () => {
+        const newEntry = document.createElement("div");
+        newEntry.classList.add("professional-project-entry", "border", "p-6", "rounded-lg", "bg-gray-50", "space-y-4");
+        newEntry.innerHTML = `
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Project Title</label>
+                    <input type="text" name="professionalProjectTitle[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter project title">
+                </div>
+                <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Role</label>
+                    <input type="text" name="professionalProjectRole[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Your role">
+                </div>
+                <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Duration</label>
+                    <input type="text" name="professionalProjectDuration[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Jan 2023 - Present">
+                </div>
+                <div class="space-y-2">
+                    <label class="block font-medium text-gray-700">Technologies Used</label>
+                    <input type="text" name="professionalProjectTechnologies[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., Python, React, AWS">
+                </div>
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block font-medium text-gray-700">Contribution</label>
+                    <textarea name="professionalProjectContribution[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Describe your contribution" rows="4"></textarea>
+                </div>
+            </div>
+            <button type="button" class="remove-entry mt-4 px-6 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition">Remove</button>
+        `;
+        professionalProjectFields.appendChild(newEntry);
+    });
 
     // Add Internship Button
     addInternshipBtn.addEventListener("click", () => {
@@ -361,21 +400,29 @@ document.addEventListener("DOMContentLoaded", () => {
         publicationsFields.appendChild(newEntry);
     });
 
-    // Remove Entry
-    document.addEventListener("click", (e) => {
-        if (e.target.classList.contains("remove-entry")) {
-            const entry = e.target.closest(".education-entry, .project-entry, .experience-entry, .internship-entry, .achievement-entry, .certification-entry, .publication-entry");
-            const parent = entry.parentElement;
-
-            if (entry.classList.contains("achievement-entry") || entry.classList.contains("certification-entry") || entry.classList.contains("publication-entry")) {
-                entry.remove();
-            } else if (parent.children.length > 1) {
-                entry.remove();
-            } else {
-                alert("Default fields cannot be removed.");
-            }
+// Remove Entry
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("remove-entry")) {
+        const entry = e.target.closest(".education-entry, .project-entry, .experience-entry, .internship-entry, .achievement-entry, .certification-entry, .publication-entry, .professional-project-entry");
+        
+        if (!entry) {
+            return; // Guard clause in case entry is null
         }
-    });
+        
+        const parent = entry.parentElement;
+
+        if (entry.classList.contains("achievement-entry") || 
+            entry.classList.contains("certification-entry") || 
+            entry.classList.contains("publication-entry") || 
+            entry.classList.contains("professional-project-entry")) {
+            entry.remove();
+        } else if (parent.children.length > 1) {
+            entry.remove();
+        } else {
+            alert("Default fields cannot be removed.");
+        }
+    }
+});
 
 // Form Submission
 resumeForm.addEventListener("submit", async function (e) {
@@ -431,14 +478,17 @@ resumeForm.addEventListener("submit", async function (e) {
             desiredRole: formDataObj.desiredRole,
             desiredCompany: formDataObj.desiredCompany,
             generateCoverLetter: formDataObj.generateCoverLetter === "on",
+            additionalSkills: formDataObj.additionalSkills,
             agreedToTerms: true,
             education: [],
+            professionalProjects: [],
             projects: [],
             internships: [],
             experience: [],
             achievements: [],
             certifications: [],
             publications: [],
+            
         };
         // Process education data
         if (formDataObj.institution) {
@@ -454,7 +504,6 @@ resumeForm.addEventListener("submit", async function (e) {
 
         // Process projects with project-specific technologies
         if (formDataObj.projectTitle && formDataObj.projectTitle.length > 0) {
-            const projectTechFields = document.querySelectorAll('.project-entry input[name="technologies[]"]');
             for (let i = 0; i < formDataObj.projectTitle.length; i++) {
                 // Only push if there's actually a title
                 if (formDataObj.projectTitle[i]) {
@@ -462,7 +511,7 @@ resumeForm.addEventListener("submit", async function (e) {
                         projectTitle: formDataObj.projectTitle[i],
                         projectRole: formDataObj.projectRole[i],
                         projectDuration: formDataObj.projectDuration[i],
-                        technologiesUsed: projectTechFields[i] ? projectTechFields[i].value : '',
+                        technologiesUsed: formDataObj.projectTechnologies[i],
                         contribution: formDataObj.contribution[i],
                     });
                 }
@@ -478,7 +527,7 @@ resumeForm.addEventListener("submit", async function (e) {
                         organization: formDataObj.internship_organization[i],
                         role: formDataObj.internship_role[i],
                         duration: formDataObj.internship_duration[i],
-                        technologiesUsed: internshipFields[i] ? internshipFields[i].value : '',
+                        technologiesUsed: formDataObj.internship_technologies[i],
                         contribution: formDataObj.internship_contribution[i]
                     });
                 }
@@ -495,8 +544,22 @@ resumeForm.addEventListener("submit", async function (e) {
                         company: formDataObj.company[i],
                         jobTitle: formDataObj.jobTitle[i],
                         workDuration: formDataObj.workDuration[i],
-                        technologiesUsed: experienceFields[i] ? experienceFields[i].value : '',
+                        technologiesUsed: formDataObj.experienceTechnologies ? formDataObj.experienceTechnologies[i] : "No",
                         responsibilities: formDataObj.responsibilities[i]
+                    });
+                }
+            }
+        }
+
+        if (formDataObj.professionalProjectTitle) {
+            for (let i = 0; i < formDataObj.professionalProjectTitle.length; i++) {
+                if (formDataObj.professionalProjectTitle[i]) {
+                    finalData.projects.push({
+                        projectTitle: formDataObj.professionalProjectTitle[i],
+                        projectRole: formDataObj.professionalProjectRole[i],
+                        projectDuration: formDataObj.professionalProjectDuration[i],
+                        technologiesUsed: formDataObj.professionalProjectTechnologies[i],
+                        contribution: formDataObj.professionalProjectContribution[i],
                     });
                 }
             }
@@ -541,14 +604,14 @@ resumeForm.addEventListener("submit", async function (e) {
         const pdfs = {};
 
         // 1. ALWAYS send to getData endpoint
-        const getDataPromise = fetch('http://192.168.1.9:8501/getData', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(finalData)
-        });
+        // const getDataPromise = fetch('http://192.168.1.9:8501/getData', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(finalData)
+        // });
 
         // 2. Set up resume generation
-        const resumePromise = fetch('http://192.168.1.5:8502/generate/generate_resume', {
+        const resumePromise = fetch('https://immortal-quetzal-scarcely.ngrok-free.app/generate/generate_resume', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(finalData)
@@ -557,7 +620,7 @@ resumeForm.addEventListener("submit", async function (e) {
         // 3. Set up cover letter generation if requested
         let coverLetterPromise = null;
         if (finalData.generateCoverLetter) {
-            coverLetterPromise = fetch('http://192.168.1.5:8502/generate/generate_cover_letter', {
+            coverLetterPromise = fetch('https://immortal-quetzal-scarcely.ngrok-free.app/generate/generate_cover_letter', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(finalData)
@@ -565,10 +628,10 @@ resumeForm.addEventListener("submit", async function (e) {
         }
 
         // Wait for getData to complete
-        const getDataResponse = await getDataPromise;
-        if (!getDataResponse.ok) {
-            throw new Error(`Failed to send data to getData endpoint: ${getDataResponse.status}`);
-        }
+        // const getDataResponse = await getDataPromise;
+        // if (!getDataResponse.ok) {
+        //     throw new Error(`Failed to send data to getData endpoint: ${getDataResponse.status}`);
+        // }
 
         // Wait for all PDF generation requests to complete simultaneously
         const responses = await Promise.all([
@@ -1046,9 +1109,9 @@ window.addEventListener('resize', () => {
     // Determine the endpoint based on document type
     let endpoint = '';
     if (type === 'resume') {
-      endpoint = 'http://192.168.1.5:8502/generate/regenerate_resume';
+      endpoint = 'https://immortal-quetzal-scarcely.ngrok-free.app/generate/regenerate_resume';
     } else if (type === 'coverLetter') {
-      endpoint = 'http://192.168.1.5:8502/generate/regenerate_cover_letter';
+      endpoint = 'https://immortal-quetzal-scarcely.ngrok-free.app/generate/regenerate_cover_letter';
     } else if (type === 'all') {
       // Handle the regeneration of both documents
       const resumeSuccess = await regenerateDocument('resume', action);
@@ -1341,14 +1404,14 @@ window.addEventListener('resize', () => {
             const newPdfs = {};
             
             // Send to getData endpoint again
-            const getDataPromise = fetch('http://192.168.1.9:8501/getData', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(regenerationData)
-            });
+            // const getDataPromise = fetch('http://192.168.1.9:8501/getData', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(regenerationData)
+            // });
             
             // Set up resume regeneration
-            const resumePromise = fetch('http://192.168.1.5:8502/generate/generate_resume', {
+            const resumePromise = fetch('https://immortal-quetzal-scarcely.ngrok-free.app/generate/generate_resume', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(regenerationData)
@@ -1357,7 +1420,7 @@ window.addEventListener('resize', () => {
             // Set up cover letter regeneration if requested
             let coverLetterPromise = null;
             if (regenerationData.generateCoverLetter) {
-                coverLetterPromise = fetch('http://192.168.1.5:8502/generate/generate_cover_letter', {
+                coverLetterPromise = fetch('https://immortal-quetzal-scarcely.ngrok-free.app/generate/generate_cover_letter', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(regenerationData)
@@ -1365,10 +1428,10 @@ window.addEventListener('resize', () => {
             }
             
             // Wait for getData to complete
-            const getDataResponse = await getDataPromise;
-            if (!getDataResponse.ok) {
-                throw new Error(`Failed to send data to getData endpoint: ${getDataResponse.status}`);
-            }
+            // const getDataResponse = await getDataPromise;
+            // if (!getDataResponse.ok) {
+            //     throw new Error(`Failed to send data to getData endpoint: ${getDataResponse.status}`);
+            // }
             
             // Wait for all PDF generation requests to complete simultaneously
             const responses = await Promise.all([
