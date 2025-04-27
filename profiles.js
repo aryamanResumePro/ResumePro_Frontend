@@ -695,7 +695,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 showPdfPreviewModal(pdfs, finalData.name || 'User');
                 
                 // Save JSON data for reference
-                downloadObjectAsJson(finalData, "resume-data");
+                // downloadObjectAsJson(finalData, "resume-data");
 
             } catch (error) {
                 console.error('Error:', error);
