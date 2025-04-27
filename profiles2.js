@@ -904,6 +904,21 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                         ` : ''}
                         
+                        <!-- Always visible regenerate both option -->
+                        <div class="mt-4 pt-4 border-t border-dashed">
+                            <button id="regenerateBoth" class="w-full flex items-center justify-between px-4 py-3 bg-blue-50 border border-blue-100 rounded-lg hover:bg-blue-100 transition">
+                                <div class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    <span class="font-medium text-blue-700">Regenerate Both Documents</span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                     
                     <!-- Download Section -->
                     <div class="p-5 flex-1 flex flex-col justify-between">
