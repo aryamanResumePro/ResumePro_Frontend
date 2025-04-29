@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return formats[Math.floor(Math.random() * formats.length)];
     }
 
-    function setCookie(name, value, days) {
+    function setCookie(name, value, minutes) {
         let expires = "";
         if (days) {
             const date = new Date();
