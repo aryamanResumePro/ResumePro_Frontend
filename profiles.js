@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let expires = "";
         if (days) {
             const date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            date.setTime(date.getTime() + (minutes * 60 * 1000));
             expires = "; expires=" + date.toUTCString();
         }
         document.cookie = name + "=" + (value || "") + expires + "; path=/";
@@ -478,7 +478,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let uniqueId = getCookie('uid');
             if (!uniqueId) {
                 uniqueId = generateUUID();
-                setCookie('uid', uniqueId, 1); // Store for 30 days
+                setCookie('uid', uniqueId, 5); // Store for 5 minutes
             }
 
             // Show loading state
