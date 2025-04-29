@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function setCookie(name, value, minutes) {
         let expires = "";
-        if (days) {
+        if (minutes) {
             const date = new Date();
             date.setTime(date.getTime() + (minutes * 60 * 1000));
             expires = "; expires=" + date.toUTCString();
