@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Safely get all DOM elements with null checks
     const getElement = (id) => document.getElementById(id) || null;
+    initializeEducationFieldListeners();
 
     const resumeForm = getElement("resumeForm");
     const studentSection = getElement("studentSection");
@@ -56,6 +57,86 @@ document.addEventListener("DOMContentLoaded", () => {
                 mobileMenu.classList.add("hidden");
                 mobileMenu.classList.remove("show");
             });
+        });
+    }
+    
+    function isPhDDegree(degreeValue) {
+        if (!degreeValue) return false;
+        
+        // Convert to lowercase for case-insensitive comparison
+        const lowerDegree = degreeValue.toLowerCase();
+        
+        // Check for variations of PhD
+        return lowerDegree.includes('phd') || 
+               lowerDegree.includes('ph.d') || 
+               lowerDegree.includes('doctor of philosophy') ||
+               lowerDegree.includes('doctorate');
+    }
+    
+    // Function to update the required status of grade field
+    function updateGradeRequiredStatus(degreeInput, gradeInput) {
+        // Find the corresponding note element
+        const entryContainer = degreeInput.closest('.education-entry');
+        const phdNote = entryContainer.querySelector('.phd-note');
+        
+        if (isPhDDegree(degreeInput.value)) {
+            gradeInput.removeAttribute('required');
+            gradeInput.placeholder = "Optional for PhD";
+            
+            // Show the PhD note if it exists
+            if (phdNote) {
+                phdNote.classList.remove('hidden');
+            }
+            
+            // Update the label to indicate optional status
+            const gradeLabel = gradeInput.previousElementSibling;
+            if (gradeLabel && gradeLabel.tagName === 'LABEL') {
+                // Remove any existing optional indicator
+                const existingSpan = gradeLabel.querySelector('.optional-indicator');
+                if (!existingSpan) {
+                    const optionalSpan = document.createElement('span');
+                    optionalSpan.classList.add('optional-indicator', 'text-gray-500', 'text-sm', 'ml-2');
+                    optionalSpan.textContent = '(Optional)';
+                    gradeLabel.appendChild(optionalSpan);
+                }
+            }
+        } else {
+            gradeInput.setAttribute('required', '');
+            gradeInput.placeholder = "e.g., 85%, 3.8 GPA";
+            
+            // Hide the PhD note
+            if (phdNote) {
+                phdNote.classList.add('hidden');
+            }
+            
+            // Remove optional indicator if present
+            const gradeLabel = gradeInput.previousElementSibling;
+            if (gradeLabel && gradeLabel.tagName === 'LABEL') {
+                const optionalSpan = gradeLabel.querySelector('.optional-indicator');
+                if (optionalSpan) {
+                    optionalSpan.remove();
+                }
+            }
+        }
+    }
+    
+    // Initialize event listeners for existing education fields
+    function initializeEducationFieldListeners() {
+        const educationEntries = document.querySelectorAll('.education-entry');
+        
+        educationEntries.forEach(entry => {
+            const degreeInput = entry.querySelector('input[name="degree[]"]');
+            const gradeInput = entry.querySelector('input[name="grade[]"]');
+            
+            if (degreeInput && gradeInput) {
+                // Initial check
+                updateGradeRequiredStatus(degreeInput, gradeInput);
+                
+                // Add change event listener
+                degreeInput.addEventListener('input', () => {
+                    updateGradeRequiredStatus(degreeInput, gradeInput);
+                });
+            }
         });
     }
 
@@ -184,33 +265,54 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    initializeEducationFieldListeners();
+
     // Add Education Entry
     if (addEducationBtn && educationFields) {
         addEducationBtn.addEventListener("click", () => {
             const newEntry = document.createElement("div");
             newEntry.classList.add("education-entry", "border", "p-6", "rounded-lg", "bg-gray-50", "space-y-4");
             newEntry.innerHTML = `
-                <div class="grid md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
-                        <label class="block font-medium text-gray-700">University/College</label>
+                        <label class="block font-medium text-gray-700">School/College/University</label>
                         <input type="text" name="institution[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Enter institution name" required>
                     </div>
                     <div class="space-y-2">
-                        <label class="block font-medium text-gray-700">Degree</label>
-                        <input type="text" name="degree[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Degree obtained" required>
+                        <label class="block font-medium text-gray-700">Academic Background and Qualification</label>
+                        <input type="text" name="degree[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Class 10/Class 12/UG/PG/Ph.D" required>
                     </div>
                     <div class="space-y-2">
-                        <label class="block font-medium text-gray-700">Year of Graduation</label>
+                        <label class="block font-medium text-gray-700">Academic Tenure</label>
                         <input type="text" name="graduationYear[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="Graduation year" required>
                     </div>
                     <div class="space-y-2">
                         <label class="block font-medium text-gray-700">Percentage/Grade/GPA</label>
-                        <input type="text" name="grade[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., 85%, 3.8 GPA">
+                        <input type="text" name="grade[]" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500" placeholder="e.g., 85%, 3.8 GPA" required>
+                        <p class="text-sm text-gray-500 hidden phd-note">Not required for PhD</p>
                     </div>
                 </div>
                 <button type="button" class="remove-entry mt-4 px-6 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition">Remove</button>
             `;
             educationFields.appendChild(newEntry);
+            
+            // Set up listeners for the new education entry
+            const newDegreeInput = newEntry.querySelector('input[name="degree[]"]');
+            const newGradeInput = newEntry.querySelector('input[name="grade[]"]');
+            
+            if (newDegreeInput && newGradeInput) {
+                newDegreeInput.addEventListener('input', () => {
+                    updateGradeRequiredStatus(newDegreeInput, newGradeInput);
+                });
+            }
+            
+            // Set up remove button listener
+            const removeBtn = newEntry.querySelector('.remove-entry');
+            if (removeBtn) {
+                removeBtn.addEventListener("click", () => {
+                    newEntry.remove();
+                });
+            }
         });
     }
 
@@ -465,9 +567,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Form Submission - only if form exists
+    
     if (resumeForm) {
+        let isSubmitting = false;
+        const originalSubmitHandler = resumeForm.onsubmit;
         resumeForm.addEventListener("submit", async function (e) {
             e.preventDefault();
+
+            // Prevent multiple submissions
+            if (isSubmitting) {
+                return;
+            }
 
             if (!agreeTermsCheckbox?.checked) {
                 alert('You must agree to the Terms of Use and Privacy Policy to continue.');
@@ -486,7 +596,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!submitButton) return;
             
             const originalButtonText = submitButton.textContent;
+            isSubmitting = true;
             submitButton.disabled = true;
+            submitButton.classList.add('opacity-60', 'cursor-not-allowed');
             submitButton.innerHTML = '<span class="inline-flex items-center"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Processing...</span>';
 
             try {
@@ -535,12 +647,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Process education data
                 if (formDataObj.institution) {
                     for (let i = 0; i < formDataObj.institution.length; i++) {
-                        finalData.education.push({
-                            institution: formDataObj.institution[i] || '',
-                            degree: formDataObj.degree[i] || '',
-                            graduationYear: formDataObj.graduationYear[i] || '',
-                            grade: formDataObj.grade[i] || '',
-                        });
+                        if (formDataObj.institution[i] ||  formDataObj.degree[i]){
+                            finalData.education.push({
+                                institution: formDataObj.institution[i] || '',
+                                degree: formDataObj.degree[i] || '',
+                                graduationYear: formDataObj.graduationYear[i] || '',
+                                grade: formDataObj.grade[i] || '',
+                            });
+                        }
                     }
                 }
 
@@ -609,38 +723,47 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Process achievements
                 if (formDataObj.achievementTitle) {
                     for (let i = 0; i < formDataObj.achievementTitle.length; i++) {
-                        finalData.achievements.push({
-                            title: formDataObj.achievementTitle[i] || '',
-                            date: formDataObj.achievementDate[i] || '',
-                            description: formDataObj.achievementDescription[i] || '',
-                        });
+                        if (formDataObj.achievementTitle[i] || formDataObj.achievementDate[i]){
+                            finalData.achievements.push({
+                                title: formDataObj.achievementTitle[i] || '',
+                                date: formDataObj.achievementDate[i] || '',
+                                description: formDataObj.achievementDescription[i] || '',
+                            });
+                        }
+                        
                     }
                 }
 
                 // Process certifications
                 if (formDataObj.certificationTitle) {
                     for (let i = 0; i < formDataObj.certificationTitle.length; i++) {
-                        finalData.certifications.push({
-                            title: formDataObj.certificationTitle[i] || '',
-                            issuer: formDataObj.certificationIssuer[i] || '',
-                            date: formDataObj.certificationDate[i] || '',
-                            certificateNumber: formDataObj.certificationNumber[i] || '',
-                            validity: formDataObj.certificationValidity[i] || '',
-                        });
+                        // Check if any important field has a value (title or issuer)
+                        if (formDataObj.certificationTitle[i] || formDataObj.certificationIssuer[i]) {
+                            finalData.certifications.push({
+                                title: formDataObj.certificationTitle[i] || '',
+                                issuer: formDataObj.certificationIssuer[i] || '',
+                                date: formDataObj.certificationDate[i] || '',
+                                certificateNumber: formDataObj.certificationNumber[i] || '',
+                                validity: formDataObj.certificationValidity[i] || '',
+                            });
+                        }
                     }
                 }
 
                 // Process publications
                 if (formDataObj.publicationTitle) {
                     for (let i = 0; i < formDataObj.publicationTitle.length; i++) {
-                        finalData.publications.push({
-                            title: formDataObj.publicationTitle[i] || '',
-                            authors: formDataObj.publicationAuthors[i] || '',
-                            link: formDataObj.publicationLink[i] || '',
-                        });
+                        // Add publication if any field has a value
+                        if (formDataObj.publicationTitle[i] || formDataObj.publicationAuthors[i] || formDataObj.publicationLink[i]) {
+                            finalData.publications.push({
+                                title: formDataObj.publicationTitle[i] || '',
+                                authors: formDataObj.publicationAuthors[i] || '',
+                                link: formDataObj.publicationLink[i] || '',
+                            });
+                        }
                     }
                 }
-
+                
                 // Collection of PDFs to display
                 const pdfs = {};
 
@@ -704,8 +827,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Restore button state
                 if (submitButton) {
                     submitButton.disabled = false;
+                    submitButton.classList.remove('opacity-60', 'cursor-not-allowed');
                     submitButton.textContent = originalButtonText;
                 }
+                isSubmitting = false;
             }
         });
     }
